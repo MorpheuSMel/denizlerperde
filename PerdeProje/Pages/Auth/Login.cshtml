@@ -1,0 +1,61 @@
+@page
+@model PerdeProje.Pages.Auth.LoginModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+<link rel="stylesheet" href="~/css/login.css" />
+
+<section class="login-section">
+    <div class="login-container">
+        <div class="login-card">
+
+            <div class="login-header">
+                <span class="login-icon">🔒</span>
+                <h1 class="login-title">Giriş Yap</h1>
+                <p class="login-subtitle">Hesabınıza erişin</p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="login-alert alert-danger" role="alert">
+                    ⚠️ @Model.ErrorMessage
+                </div>
+            }
+
+            <form method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label class="form-label" for="Email">📧 E-posta Adresi</label>
+                    <input type="email" id="Email" name="Email" class="form-control" placeholder="ornek@email.com" value="@Model.Email" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="Sifre">🔑 Şifre</label>
+                    <input type="password" id="Sifre" name="Sifre" class="form-control" placeholder="••••••••" />
+                </div>
+
+                <div style="display: flex; justify-content: center; width: 100%; margin-top: 1rem;">
+                    <button type="submit" class="login-btn">Giriş Yap</button>
+                </div>
+            </form>
+
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">YENİ MISIN?</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="login-footer">
+                <p class="footer-text">
+                    Henüz bir hesabın yok mu?
+                    <br />
+                    <a href="/Auth/Register" class="footer-link">✨ Kayıt Ol</a>
+                </p>
+
+                <a href="/" class="back-home">← Ana Sayfaya Dön</a>
+            </div>
+
+        </div>
+    </div>
+</section>

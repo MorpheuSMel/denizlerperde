@@ -1,0 +1,259 @@
+﻿@page
+@model PerdeProje.Pages.KullaniciSayfasiModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müşteri Paneli - Denizler Perde</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+            body {
+                background-color: #fcfbfa;
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            }
+
+            .main-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .card-custom {
+                background: #ffffff;
+                border-radius: 30px;
+                border: none;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.01);
+                padding: 30px;
+            }
+
+            .btn-custom {
+                border: 2px solid #6b5344;
+                color: #6b5344;
+                border-radius: 15px;
+                font-weight: 600;
+                background: transparent;
+                transition: all 0.2s;
+                text-decoration: none;
+            }
+
+                .btn-custom:hover {
+                    background: #6b5344;
+                    color: #fff;
+                }
+
+            .btn-custom-outline {
+                border: 2px solid #6b5344;
+                color: #6b5344;
+                border-radius: 15px;
+                font-weight: 600;
+                background: transparent;
+                transition: all 0.2s;
+                text-decoration: none;
+            }
+
+                .btn-custom-outline:hover {
+                    background: #6b5344;
+                    color: #fff;
+                }
+
+            .form-control-custom {
+                background-color: #f8f9fa;
+                border: none;
+                border-radius: 12px;
+                padding: 12px 15px;
+            }
+
+            .nav-btn {
+                padding: 8px 20px;
+                border-radius: 20px;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.2s;
+            }
+
+            .btn-home {
+                background-color: #e6dfda;
+                color: #6b5344;
+            }
+
+                .btn-home:hover {
+                    background-color: #6b5344;
+                    color: #fff;
+                }
+
+            .btn-logout {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+
+                .btn-logout:hover {
+                    background-color: #721c24;
+                    color: #fff;
+                }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+
+        <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+            <a href="/Index" class="nav-btn btn-home"><i class="fas fa-home me-2"></i>Ana Sayfa</a>
+            <a href="/Auth/Logout" class="nav-btn btn-logout"><i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap</a>
+        </div>
+
+        <div class="card-custom text-center mb-4 py-4" style="border-radius: 40px;">
+            <span class="badge px-3 py-2 mb-2 fw-bold" style="background-color: #fff3cd; color: #856404; border-radius: 20px; font-size: 0.8rem;">✨ Hoş Geldiniz</span>
+            <h1 class="fw-bold" style="color: #6b5344; font-size: 2.5rem;">Müşteri Paneli & Takip</h1>
+            <p class="text-muted m-0 mx-auto" style="max-width: 600px;">Bilgilerinizi doğrudan bu ekrandan güncelleyebilir ve işlemlerinizi takip edebilirsiniz.</p>
+
+            @if (!string.IsNullOrEmpty(Model.BilgiMesaji))
+            {
+                <div class="alert alert-success d-inline-block mt-3 px-4 py-2 rounded-3 fw-bold">@Model.BilgiMesaji</div>
+            }
+            @if (TempData["PanelMesaji"] is string panelMesaji && !string.IsNullOrWhiteSpace(panelMesaji))
+            {
+                <div class="alert alert-success d-inline-block mt-3 px-4 py-2 rounded-3 fw-bold">@panelMesaji</div>
+            }
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card-custom text-center h-100">
+                    <div class="mx-auto mb-3 d-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 80px; height: 80px;">
+                        <i class="fas fa-user" style="font-size: 2.2rem; color: #6b5344;"></i>
+                    </div>
+                    <h3 class="fw-bold" style="color: #6b5344;">Hesap Bilgileri</h3>
+                    <p class="text-muted small mb-4">Kişisel Detaylar</p>
+
+                    <form method="post">
+                        <div class="mb-3 text-start">
+                            <label class="form-label small fw-bold text-muted ms-1">E-Posta Adresi</label>
+                            <input type="email" asp-for="Eposta" class="form-control form-control-custom" required />
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="form-label small fw-bold text-muted ms-1">Telefon Numarası</label>
+                            <input type="tel" asp-for="Telefon" class="form-control form-control-custom phone-mask" placeholder="0xxx xxx xx xx" maxlength="14" inputmode="numeric" required />
+                        </div>
+                        <div class="mb-4 text-start">
+                            <label class="form-label small fw-bold text-muted ms-1">Yeni Şifre</label>
+                            <input type="password" asp-for="Sifre" class="form-control form-control-custom" placeholder="Boş bırakırsanız değişmez" minlength="6" autocomplete="new-password" />
+                            <small class="text-muted ms-1">Yeni şifre en az 6 karakter olmalı.</small>
+                        </div>
+                        <button type="submit" class="btn btn-custom w-100 py-2 mt-2">Değişiklikleri Kaydet</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="row g-4">
+
+                    <div class="col-12">
+                        <div class="card-custom">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="fw-bold m-0" style="color: #6b5344;"><span class="me-2">📦</span>Siparişlerim</h4>
+                                <span class="badge bg-light text-dark px-3 py-1 border" style="border-radius: 15px; font-weight: 600;">@(Model.KullaniciSiparisleri?.Count ?? 0) Sipariş</span>
+                            </div>
+
+                            @if (Model.KullaniciSiparisleri == null || Model.KullaniciSiparisleri.Count == 0)
+                            {
+                                <div class="text-center py-4">
+                                    <span style="font-size: 2.5rem;">📬</span>
+                                    <h5 class="fw-bold mt-2" style="color: #6b5344;">Henüz bir siparişiniz bulunmamaktadır.</h5>
+                                    <p class="text-muted small m-0">Siparişleriniz üretime alındığında burada listelenecektir.</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-grid gap-3">
+                                    @foreach (var siparis in Model.KullaniciSiparisleri.OrderByDescending(s => s.SiparisTarihi))
+                                    {
+                                        <div class="d-flex justify-content-between align-items-center bg-light rounded-4 p-3">
+                                            <div>
+                                                <div class="fw-bold" style="color:#6b5344;">@siparis.UrunAdi</div>
+                                                <div class="text-muted small">@siparis.SiparisKodu - @siparis.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</div>
+                                            </div>
+                                            <span class="badge px-3 py-2" style="background:#e6dfda; color:#6b5344; border-radius:14px;">@Model.DurumMetni(siparis.Durum)</span>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="card-custom text-white d-flex flex-column justify-content-between" style="background-color: #6b5344; min-height: 240px; border-radius: 30px;">
+                            <div>
+                                <h4 class="fw-bold mb-3">🗓️ Randevularım</h4>
+                                @if (Model.KullaniciRandevulari.Any())
+                                {
+                                    <div class="d-grid gap-2">
+                                        @foreach (var randevu in Model.KullaniciRandevulari.Take(3))
+                                        {
+                                            <div class="rounded-3 px-3 py-2 text-start" style="background:rgba(255,255,255,.12);">
+                                                <div class="fw-semibold">@randevu.PerdeTuru</div>
+                                                <div class="small text-white-50">@randevu.Olcu - @Model.DurumMetni(randevu.DurumEtiketi)</div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="text-white-50 small">Henüz aktif bir randevunuz bulunmamaktadır. 🗓️</p>
+                                }
+                            </div>
+                            <a href="/Iletisim" class="btn btn-light w-100 py-2 fw-bold" style="color: #6b5344; border-radius: 15px; text-align: center;">Yeni Randevu Al</a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="card-custom d-flex flex-column justify-content-between" style="min-height: 240px; border-radius: 30px;">
+                            <div>
+                                <h4 class="fw-bold mb-3" style="color: #6b5344;">❤️ Favorilerim</h4>
+                                @if (Model.KullaniciFavorileri.Any())
+                                {
+                                    <div class="d-grid gap-2">
+                                        @foreach (var favori in Model.KullaniciFavorileri)
+                                        {
+                                            <div class="bg-light rounded-3 px-3 py-2 text-start">
+                                                <span class="fw-semibold" style="color:#6b5344;">@favori.UrunAdi</span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="text-muted small">Henüz favorilere eklenmiş ürününüz yok. ❤️</p>
+                                }
+                            </div>
+                            <a href="/Favorilerim" class="btn btn-custom-outline w-100 py-2 mt-auto text-center" style="font-size: 0.9rem; text-decoration: none;">Hepsini Gör</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.phone-mask').forEach(function (input) {
+            function formatPhone() {
+                const digits = input.value.replace(/\D/g, '').slice(0, 11);
+                const parts = [];
+                if (digits.length > 0) parts.push(digits.slice(0, 4));
+                if (digits.length > 4) parts.push(digits.slice(4, 7));
+                if (digits.length > 7) parts.push(digits.slice(7, 9));
+                if (digits.length > 9) parts.push(digits.slice(9, 11));
+                input.value = parts.join(' ');
+            }
+
+            input.addEventListener('input', formatPhone);
+            formatPhone();
+        });
+    </script>
+</body>
+</html>

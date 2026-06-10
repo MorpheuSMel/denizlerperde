@@ -1,0 +1,181 @@
+﻿@page
+@model PerdeProje.Pages.SatisModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Satış Paneli";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold" style="color: #6b5344;">✨ Popüler Hazır Perdelerimiz</h1>
+        <p class="text-muted">Özel ölçü beklemeden, hemen teslim alabileceğiniz kaliteli ve şık hazır perdeler</p>
+        <hr style="width: 100px; border-top: 3px solid #6b5344; margin: 0 auto;">
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Mesaj) &&
+        (Model.Mesaj.Contains("sepete", StringComparison.OrdinalIgnoreCase) ||
+         Model.Mesaj.Contains("favori", StringComparison.OrdinalIgnoreCase) ||
+         Model.Mesaj.Contains("urun", StringComparison.OrdinalIgnoreCase)))
+    {
+        <div class="alert alert-success text-center shadow-sm border-0" role="alert">
+            @Model.Mesaj
+        </div>
+    }
+
+    <form method="get" class="row g-3 align-items-end mb-4 p-3 bg-white shadow-sm" style="border-radius: 16px;">
+        <div class="col-md-5">
+            <label class="form-label fw-semibold" style="color: #6b5344;">Kategori</label>
+            <select class="form-select" name="Kategori">
+                <option value="">Tüm ürünler</option>
+                @foreach (var kategori in Model.Kategoriler)
+                {
+                    <option value="@kategori" selected="@(Model.Kategori == kategori)">@kategori</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-5">
+            <label class="form-label fw-semibold" style="color: #6b5344;">Sıralama</label>
+            <select class="form-select" name="Siralama">
+                <option value="ad-artan" selected="@(Model.Siralama == "ad-artan")">Ada göre A-Z</option>
+                <option value="ad-azalan" selected="@(Model.Siralama == "ad-azalan")">Ada göre Z-A</option>
+                <option value="fiyat-artan" selected="@(Model.Siralama == "fiyat-artan")">Fiyat: Düşükten yükseğe</option>
+                <option value="fiyat-azalan" selected="@(Model.Siralama == "fiyat-azalan")">Fiyat: Yüksekten düşüğe</option>
+                <option value="stok-azalan" selected="@(Model.Siralama == "stok-azalan")">Stok: Çoktan aza</option>
+            </select>
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn text-white fw-semibold" style="background-color: #6b5344;">
+                <i class="fas fa-filter me-2"></i>Uygula
+            </button>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @if (Model.Urunler != null && Model.Urunler.Any())
+        {
+            @foreach (var item in Model.Urunler)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+
+                        <div class="position-absolute m-3 px-3 py-1 bg-dark text-white rounded-pill small opacity-75">
+                            @item.Kategori
+                        </div>
+
+                        <div class="product-image-wrap">
+                            <img src="@(string.IsNullOrWhiteSpace(item.ResimUrl) ? "https://via.placeholder.com/600x400?text=Denizler+Perde" : item.ResimUrl)" class="card-img-top" alt="@item.Ad" style="height: 250px; object-fit: cover;">
+                            @if (!string.IsNullOrWhiteSpace(item.IkinciResimUrl))
+                            {
+                                <img src="@item.IkinciResimUrl" class="second-product-image" alt="@item.Ad ikinci görsel">
+                            }
+                        </div>
+
+                        <div class="card-body d-flex flex-column p-4">
+                            <h5 class="card-title fw-bold text-dark mb-2">@item.Ad</h5>
+
+                            <p class="card-text text-muted small flex-grow-1">@item.Aciklama</p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <div>
+                                    <span class="text-muted d-block small">Fiyat</span>
+                                    <span class="fw-bold fs-4" style="color: #6b5344;">₺@item.Fiyat.ToString("N2")</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <form method="post" action="/Satis?handler=FavoriyeEkle&id=@item.Id" style="margin:0;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn action-heart-btn" title="Favorilere ekle">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                    </form>
+                                    @if (!string.IsNullOrWhiteSpace(HttpContext.Session.GetString("UserId")))
+                                    {
+                                        <form method="post" action="/Satis?handler=SepeteEkle&id=@item.Id" style="margin:0;">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn cart-action-btn">
+                                                <i class="fas fa-shopping-cart me-2"></i> Sepete Ekle
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <a href="/Auth/Login" class="btn cart-action-btn">
+                                            <i class="fas fa-lock me-2"></i> Giriş Yap
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center my-5">
+                <p class="text-muted fs-5">Henüz satışta ürün bulunmuyor.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .action-heart-btn {
+        width: 46px;
+        height: 44px;
+        border-radius: 14px;
+        border: 1px solid #eadfd7;
+        background: #fff8f5;
+        color: #9f4f4f;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .action-heart-btn:hover {
+        background: #9f4f4f;
+        border-color: #9f4f4f;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .cart-action-btn {
+        min-height: 44px;
+        border-radius: 14px;
+        padding: 0 18px;
+        background: linear-gradient(135deg, #6b5344 0%, #4a3a2f 100%);
+        color: #fff;
+        font-weight: 700;
+        border: 0;
+        box-shadow: 0 8px 18px rgba(107, 83, 68, 0.18);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .cart-action-btn:hover {
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 12px 22px rgba(107, 83, 68, 0.24);
+    }
+
+    .product-image-wrap {
+        position: relative;
+    }
+
+    .second-product-image {
+        position: absolute;
+        right: 14px;
+        bottom: 14px;
+        width: 86px;
+        height: 68px;
+        object-fit: cover;
+        border: 3px solid #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+        background: #fff;
+    }
+</style>

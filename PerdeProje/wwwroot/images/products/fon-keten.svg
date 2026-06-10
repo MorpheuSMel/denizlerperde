@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+  <defs><linearGradient id="w" x1="0" x2="1"><stop stop-color="#f7efe8"/><stop offset="1" stop-color="#fffaf5"/></linearGradient></defs>
+  <rect width="900" height="650" fill="url(#w)"/>
+  <rect x="110" y="70" width="680" height="500" rx="26" fill="#ffffff" stroke="#e1d2c6" stroke-width="10"/>
+  <rect x="180" y="105" width="540" height="390" fill="#eaf4f7"/>
+  <g fill="#c8ad93">
+    <path d="M150 82h120v430c-28 24-66 24-120 0z"/>
+    <path d="M630 82h120v430c-28 24-66 24-120 0z"/>
+  </g>
+  <g stroke="#b99677" stroke-width="7" opacity=".55">
+    <path d="M180 100c18 90 18 270 0 410"/><path d="M225 100c-18 90-18 270 0 410"/>
+    <path d="M675 100c18 90 18 270 0 410"/><path d="M720 100c-18 90-18 270 0 410"/>
+  </g>
+  <rect x="120" y="85" width="660" height="18" rx="9" fill="#6b5344"/>
+  <text x="450" y="610" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#6b5344">Keten Fon Perde</text>
+</svg>

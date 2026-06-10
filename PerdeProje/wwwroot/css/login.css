@@ -1,0 +1,416 @@
+/* ===== LOGIN PAGE STYLES - PROFESSIONAL ===== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #6b5344;
+    --primary-dark: #4a3a2f;
+    --accent: #d4a574;
+    --accent-light: #e8d5c4;
+    --bg-light: #f9f7f4;
+    --bg-white: #fff;
+    --text-dark: #2d2d2d;
+    --text-muted: #7a7a7a;
+}
+
+.login-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #6b5344;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 0;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.login-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(212, 165, 116, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 20s ease-in-out infinite;
+    opacity: 0;
+    display: none;
+}
+
+.login-section::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(232, 213, 196, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 25s ease-in-out infinite reverse;
+    opacity: 0;
+    display: none;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(40px); }
+}
+
+.login-container {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 10;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.99);
+    border-radius: 16px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    padding: 3rem 2.5rem;
+    backdrop-filter: blur(10px);
+    border: none;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+}
+
+.login-card::before {
+    display: none;
+}
+
+.login-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 35px 70px rgba(0, 0, 0, 0.3);
+}
+
+.login-card::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(ellipse at center, #6b5344 0%, rgba(107, 83, 68, 0.5) 30%, transparent 100%);
+    border-radius: 12px;
+    z-index: -1;
+    filter: blur(15px);
+    transition: all 0.5s ease;
+    display: none !important;
+}
+
+.login-card:hover::before {
+    inset: -30px;
+    filter: blur(20px);
+    background: radial-gradient(ellipse at center, #6b5344 0%, rgba(107, 83, 68, 0.7) 30%, transparent 100%);
+    display: none !important;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2.8rem;
+    position: relative;
+}
+
+.login-icon {
+    font-size: 2.8rem;
+    margin-bottom: 1.2rem;
+    display: block;
+    opacity: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.login-title {
+    color: var(--primary);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.5px;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.login-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.1px;
+    text-transform: none;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--bg-light);
+    color: var(--text-dark);
+    font-weight: 400;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.15);
+}
+
+.form-control:hover {
+    border-color: #c0c0c0;
+    background: #ffffff;
+}
+
+.form-control::placeholder {
+    color: #adb5bd;
+    font-weight: 400;
+}
+
+.login-btn {
+    background: transparent !important;
+    color: var(--primary) !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    display: block; 
+    margin: 20px auto; 
+    min-width: 200px;
+}
+
+.login-btn * {
+    display: none !important;
+}
+
+.login-btn::before,
+.login-btn::after {
+    display: none !important;
+    content: none !important;
+}
+
+.login-btn::before {
+    display: none !important;
+}
+
+.login-btn:hover {
+        color: var(--accent) !important; /* Fare gelince sarımsı parlama */
+        text-shadow: 0 0 8px rgba(212, 165, 116, 0.5);
+        background: transparent !important;
+}
+
+.login-btn:hover::before {
+    display: none !important;
+}
+
+.login-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(107, 83, 68, 0.25);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 1rem;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+.divider-text {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.login-footer {
+    text-align: center;
+    pointer-events: auto !important;
+}
+
+.footer-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+    font-weight: 400;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    pointer-events: auto !important;
+}
+
+.footer-link {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--accent) !important;
+    padding: 0.3rem 0.6rem !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    position: relative;
+    border-radius: 4px;
+    pointer-events: auto !important;
+    z-index: 10 !important;
+}
+
+.footer-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.footer-link:hover {
+    background: rgba(212, 165, 116, 0.1) !important;
+    color: var(--accent) !important;
+    text-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(212, 165, 116, 0.2) !important;
+}
+
+.footer-link:hover::after {
+    width: 100%;
+}
+
+.back-home {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0;
+    border-radius: 0;
+    letter-spacing: 0.2px;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.back-home:hover {
+    color: var(--primary);
+    transform: translateX(-3px);
+}
+
+.login-alert {
+    border-radius: 6px;
+    border: 1px solid #f5c6cb;
+    border-left: 4px solid #dc3545;
+    background: #fff5f7;
+    color: #721c24;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    animation: slideDownAnimation 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.1);
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.login-alert.alert-success {
+    border-color: #d4edda;
+    border-left-color: #28a745;
+    background: #f1f9f6;
+    color: #155724;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.1);
+}
+
+@keyframes slideDownAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 100%;
+    }
+
+    .login-card {
+        padding: 2.5rem 1.8rem;
+        width: 100%;
+    }
+
+    .login-title {
+        font-size: 1.6rem;
+    }
+
+    .login-section::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .login-section::after {
+        width: 250px;
+        height: 250px;
+    }
+
+    /* DOSYANIN EN SONUNA EKLENECEK KISIM */
+    .pure-link {
+        background: transparent !important;
+        background-color: transparent !important;
+        color: var(--primary) !important;
+        text-decoration: none !important;
+        font-weight: 700 !important;
+        padding: 0 !important;
+        border: none !important;
+        display: inline-block !important;
+        transition: color 0.3s ease !important;
+    }
+
+        .pure-link:hover {
+            background: transparent !important;
+            background-color: transparent !important;
+            color: var(--accent) !important;
+            text-shadow: 0 0 8px rgba(212, 165, 116, 0.4) !important;
+        }
+}

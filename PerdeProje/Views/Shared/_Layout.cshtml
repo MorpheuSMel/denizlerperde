@@ -1,0 +1,190 @@
+﻿@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Denizler Perde</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+            /* Orijinal şık yuvarlak buton stilleri */
+            .btn-kayit-ol {
+                background-color: #6b5344 !important;
+                color: #ffffff !important;
+                border-radius: 20px !important;
+                padding: 6px 18px !important;
+                font-size: 0.9rem !important;
+                font-weight: 600 !important;
+                transition: all 0.3s ease;
+                text-decoration: none;
+            }
+
+            .btn-giris-yap {
+                background-color: transparent !important;
+                color: #6b5344 !important;
+                border: 1px solid #6b5344 !important;
+                border-radius: 20px !important;
+                padding: 6px 18px !important;
+                font-size: 0.9rem !important;
+                font-weight: 600 !important;
+                transition: all 0.3s ease;
+                text-decoration: none;
+            }
+
+            .btn-kayit-ol:hover {
+                background-color: #544034 !important;
+                color: #ffffff !important;
+            }
+
+            .btn-giris-yap:hover {
+                background-color: #6b5344 !important;
+                color: #ffffff !important;
+            }
+
+            .nav-link-custom {
+                color: #212529 !important;
+                font-weight: 600 !important;
+                font-size: 0.95rem;
+                transition: color 0.2s;
+            }
+
+                .nav-link-custom:hover {
+                    color: #6b5344 !important;
+                }
+
+            /* Kalın kahverengi alt şerit stilleri */
+            .footer-bg {
+                background-color: #4a3b32 !important; /* Resimdeki koyu kahve kurumsal şerit rengi */
+                color: #c4b5ab !important;
+            }
+
+                .footer-bg h5 {
+                    color: #ffffff !important;
+                    font-weight: 600;
+                    font-size: 1.1rem;
+                    margin-bottom: 1rem;
+                }
+
+                .footer-bg a {
+                    color: #c4b5ab !important;
+                    text-decoration: none;
+                    transition: color 0.2s;
+                }
+
+                    .footer-bg a:hover {
+                        color: #ffffff !important;
+                    }
+    </style>
+</head>
+<body style="background-color: #fdfaf7;">
+    <header>
+        <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #ffffff !important; box-shadow: 0 2px 10px rgba(0,0,0,0.02); padding: 15px 0;">
+            <div class="container d-flex align-items-center justify-content-center gap-5">
+
+                <a href="/" style="font-weight: 700; color: #6b5344 !important; font-size: 1.25rem; text-decoration: none; white-space: nowrap;">
+                    Denizler Perde & Tasarım
+                </a>
+
+                <div class="d-flex align-items-center gap-4">
+                    <a href="/" class="nav-link-custom" style="color: #444444 !important; font-weight: 500; font-size: 0.95rem; text-decoration: none; transition: color 0.2s; white-space: nowrap;">Anasayfa</a>
+                    <a href="/Products" class="nav-link-custom" style="color: #444444 !important; font-weight: 500; font-size: 0.95rem; text-decoration: none; transition: color 0.2s; white-space: nowrap;">Ürünler</a>
+                    <a href="/Iletisim" class="nav-link-custom" style="color: #444444 !important; font-weight: 500; font-size: 0.95rem; text-decoration: none; transition: color 0.2s; white-space: nowrap;">Randevu Sistemi</a>
+                    <a href="/Satis" class="nav-link-custom" style="color: #444444 !important; font-weight: 500; font-size: 0.95rem; text-decoration: none; transition: color 0.2s; white-space: nowrap;">
+                        <i class="fas fa-shopping-basket me-1"></i>Satış Paneli
+                    </a>
+
+                    <div class="d-flex align-items-center gap-2 ms-3">
+                        @if (!string.IsNullOrEmpty(Context.Session.GetString("UserId")))
+                        {
+                            var rol = Context.Session.GetString("UserRole");
+
+                            <a href="/Sepet" style="border: 1px solid #6b5344 !important; color: #6b5344 !important; background: transparent !important; font-weight: 500; font-size: 0.88rem; padding: 6px 16px !important; border-radius: 20px !important; text-decoration: none; white-space: nowrap; transition: all 0.2s;">
+                                <i class="fas fa-cart-shopping me-1"></i>Sepet
+                            </a>
+
+                            if (rol == "Admin")
+                            {
+                                <a href="/Admin/Dashboard" style="border: 1px solid #d4a574 !important; color: #d4a574 !important; background: transparent !important; font-weight: 500; font-size: 0.88rem; padding: 6px 16px !important; border-radius: 20px !important; text-decoration: none; white-space: nowrap; transition: all 0.2s;">
+                                    <i class="fas fa-cog me-1"></i>Admin Paneli
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/KullaniciSayfasi" style="border: 1px solid #6b5344 !important; color: #6b5344 !important; background: transparent !important; font-weight: 500; font-size: 0.88rem; padding: 6px 16px !important; border-radius: 20px !important; text-decoration: none; white-space: nowrap; transition: all 0.2s;">
+                                    <i class="fas fa-user me-1"></i>Profilim
+                                </a>
+                            }
+
+                            <a href="/Auth/Logout" style="background-color: #d9534f !important; color: #ffffff !important; font-weight: 500; font-size: 0.88rem; padding: 6px 16px !important; border-radius: 20px !important; text-decoration: none; border: 1px solid #d9534f !important; white-space: nowrap; transition: background 0.2s;">
+                                <i class="fas fa-sign-out-alt me-1"></i>Çıkış Yap
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="/Auth/Login" style="border: 1px solid #6b5344 !important; color: #6b5344 !important; background: transparent !important; font-weight: 500; font-size: 0.88rem; padding: 6px 16px !important; border-radius: 20px !important; text-decoration: none; white-space: nowrap; transition: all 0.2s;">
+                                <i class="fas fa-lock me-1"></i>Giriş Yap
+                            </a>
+
+                            <a href="/Auth/Register" style="background-color: #6b5344 !important; color: #ffffff !important; font-weight: 500; font-size: 0.88rem; padding: 6px 16px !important; border-radius: 20px !important; text-decoration: none; border: 1px solid #6b5344 !important; white-space: nowrap; transition: background 0.2s;">
+                                <i class="fas fa-user-plus me-1"></i>Kayıt Ol
+                            </a>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-5">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="footer-bg pt-5 pb-4 mt-5">
+        <div class="container">
+            <div class="row text-start">
+                <div class="col-md-4 mb-4">
+                    <h5>Denizler Perde</h5>
+                    <p style="font-size: 0.9rem; opacity: 0.85;">2014'ten beri kaliteli perde çözümleri.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>İletişim</h5>
+                    <ul class="list-unstyled" style="font-size: 0.9rem;">
+                        <li class="mb-2"><a href="tel:+905324521113" style="color: #6fa6d6 !important;">0532 452 11 13</a></li>
+                        <li><a href="mailto:info@denizlerperde.com" style="color: #6fa6d6 !important;">info@denizlerperde.com</a></li>
+                        <li class="mt-2"><a href="https://www.instagram.com/denizlerperde" target="_blank" rel="noopener" style="color: #6fa6d6 !important;"><i class="fab fa-instagram me-1"></i>@@denizlerperde</a></li>
+                        <li class="mt-2">
+                            <a href="https://www.google.com/maps/place/Denizler+Perde+%26+Tasar%C4%B1m/%4040.9952548,28.7667615,15z/data=!3m1!4b1!4m6!3m5!1s0x14caa3004d2fcd3f:0xa88157186a54a928!8m2!3d40.9952553!4d28.7770398!16s%2Fg%2F11ymk_qkr2" target="_blank" rel="noopener" style="color: #6fa6d6 !important;">
+                                <i class="fas fa-map-marker-alt me-1"></i>Denizler Perde &amp; Tasarım
+                            </a>
+                            <div style="font-size: 0.85rem; opacity: 0.85;">Yeni Mahalle, Salih Tamci Sk. 14 C</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Çalışma Saatleri</h5>
+                    <ul class="list-unstyled" style="font-size: 0.9rem; opacity: 0.85;">
+                        <li class="mb-2">Pzt-Cum: 09:00 - 18:00</li>
+                        <li>Cmt: 10:00 - 15:00</li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center pt-2" style="font-size: 0.85rem; opacity: 0.7;">
+                &copy; 2026 - Denizler Perde & Tasarım. Tüm Hakları Saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

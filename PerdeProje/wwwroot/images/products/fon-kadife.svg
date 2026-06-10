@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+  <rect width="900" height="650" fill="#fbf7f3"/>
+  <rect x="115" y="70" width="670" height="505" rx="24" fill="#fff" stroke="#e7d7cb" stroke-width="10"/>
+  <rect x="210" y="105" width="480" height="385" fill="#eef7fa"/>
+  <g fill="#70463f">
+    <path d="M145 82h150v438c-38 30-88 30-150 0z"/>
+    <path d="M605 82h150v438c-38 30-88 30-150 0z"/>
+  </g>
+  <g stroke="#8d5b52" stroke-width="9" opacity=".6">
+    <path d="M190 100c25 110 25 280 0 425"/><path d="M250 100c-25 110-25 280 0 425"/>
+    <path d="M650 100c25 110 25 280 0 425"/><path d="M710 100c-25 110-25 280 0 425"/>
+  </g>
+  <rect x="125" y="86" width="650" height="20" rx="10" fill="#4a3a2f"/>
+  <text x="450" y="610" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#6b5344">Kadife Fon Perde</text>
+</svg>

@@ -1,0 +1,106 @@
+@page
+@model PerdeProje.Pages.Auth.RegisterModel
+@{
+	ViewData["Title"] = "Kayıt Ol";
+}
+<link rel="stylesheet" href="~/css/login.css" />
+
+<section class="login-section">
+	<div class="login-container">
+		<div class="login-card">
+			<div class="login-header">
+				<span class="login-icon"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#6b5344"><path d="M726.67-400v-126.67H600v-66.66h126.67V-720h66.66v126.67H920v66.66H793.33V-400h-66.66ZM250.33-524.33Q206.67-568 206.67-634t43.66-109.67Q294-787.33 360-787.33t109.67 43.66Q513.33-700 513.33-634t-43.66 109.67Q426-480.67 360-480.67t-109.67-43.66ZM40-160v-100q0-34.67 17.5-63.17T106.67-366q70.66-32.33 131-46.5Q298-426.67 360-426.67t122 14.17q60 14.17 130.67 46.5 31.66 15 49.5 43.17Q680-294.67 680-260v100H40Zm66.67-66.67h506.66V-260q0-14.33-7.83-27t-20.83-19q-65.34-31-116.34-42.5T360-360q-57.33 0-108.67 11.5Q200-337 134.67-306q-13 6.33-20.5 19t-7.5 27v33.33Zm315.16-345.5Q446.67-597 446.67-634t-24.84-61.83Q397-720.67 360-720.67t-61.83 24.84Q273.33-671 273.33-634t24.84 61.83Q323-547.33 360-547.33t61.83-24.84ZM360-634Zm0 407.33Z" /></svg></span>
+				<h1 class="login-title">Kayıt Ol</h1>
+				<p class="login-subtitle">Yeni hesap oluştur</p>
+			</div>
+
+			@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+			{
+				<div class="login-alert alert-danger" role="alert">
+					⚠️ @Model.ErrorMessage
+				</div>
+			}
+
+			@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+			{
+				<div class="login-alert alert-success" role="alert">
+					✅ @Model.SuccessMessage
+				</div>
+			}
+
+			<form method="post">
+				@Html.AntiForgeryToken()
+
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+					<div class="form-group">
+						<label class="form-label" for="Ad">👤 Ad *</label>
+						<input type="text" id="Ad" name="Ad" class="form-control" placeholder="Adınız" />
+					</div>
+					<div class="form-group">
+						<label class="form-label" for="Soyad">👤 Soyad *</label>
+						<input type="text" id="Soyad" name="Soyad" class="form-control" placeholder="Soyadınız" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="Email">📧 E-posta *</label>
+					<input type="email" id="Email" name="Email" class="form-control" placeholder="ornek@email.com" />
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="Telefon">📱 Telefon</label>
+					<input type="tel" id="Telefon" name="Telefon" class="form-control phone-mask" placeholder="0xxx xxx xx xx" maxlength="14" inputmode="numeric" />
+				</div>
+
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+					<div class="form-group">
+						<label class="form-label" for="Sifre">🔑 Şifre *</label>
+						<input type="password" id="Sifre" name="Sifre" class="form-control" placeholder="En az 6 karakter" minlength="6" autocomplete="new-password" />
+						<small style="color: var(--text-muted); display: block; margin-top: 0.3rem; font-size: 0.8rem;">En az 6 karakter</small>
+					</div>
+					<div class="form-group">
+						<label class="form-label" for="SifreKontrol">🔑 Şifre Tekrar *</label>
+						<input type="password" id="SifreKontrol" name="SifreKontrol" class="form-control" placeholder="Şifreyi tekrar girin" minlength="6" autocomplete="new-password" />
+					</div>
+				</div>
+
+				<div style="display: flex; justify-content: center; width: 100%; margin-top: 1rem;">
+					<button type="submit" class="login-btn">Kayıt Ol</button>
+				</div>
+			</form>
+
+			<div class="divider">
+				<div class="divider-line"></div>
+				<span class="divider-text">Zaten hesabın var?</span>
+				<div class="divider-line"></div>
+			</div>
+
+			<div class="login-footer">
+				<p class="footer-text">
+					Hesabınız varsa
+					<br />
+					<a href="/Auth/Login" class="footer-link">🔐 Giriş Yap</a>
+				</p>
+
+				<a href="/" class="back-home">← Ana Sayfaya Dön</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	document.querySelectorAll('.phone-mask').forEach(function (input) {
+		function formatPhone() {
+			const digits = input.value.replace(/\D/g, '').slice(0, 11);
+			const parts = [];
+			if (digits.length > 0) parts.push(digits.slice(0, 4));
+			if (digits.length > 4) parts.push(digits.slice(4, 7));
+			if (digits.length > 7) parts.push(digits.slice(7, 9));
+			if (digits.length > 9) parts.push(digits.slice(9, 11));
+			input.value = parts.join(' ');
+		}
+
+		input.addEventListener('input', formatPhone);
+		formatPhone();
+	});
+</script>

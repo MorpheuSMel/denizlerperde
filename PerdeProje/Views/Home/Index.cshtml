@@ -1,0 +1,186 @@
+﻿@page
+@model PerdeProje.Pages.IndexModel
+@{
+    ViewData["Title"] = "Anasayfa";
+    Layout = "_Layout"; // İşte tasarımı giydiren sihirli satır bu!
+}
+
+<h1>BURASI BENİM GERÇEK SAYFAM!</h1>
+<div class="hero-section text-center py-5 shadow-sm" style="background: linear-gradient(135deg, #fdfaf7 0%, #ffffff 100%); border-radius: 0 0 50px 50px; margin-bottom: 50px;" >
+    <div class="container">
+        <span class="badge rounded-pill bg-light text-dark mb-3 px-3 py-2 shadow-sm border">🏠 2014'ten Beri Kalitenin Adresi</span>
+        <h1 class="fw-bold" style="color: #6b5344; font-size: 3rem; letter-spacing: -1px;">Denizler Perde & Tasarım</h1>
+        <p class="text-muted mx-auto mb-4" style="max-width: 700px; font-size: 1.2rem;">Hayalinizdeki pencereleri gerçeğe dönüştürüyoruz. Modern tasarımlar, kaliteli kumaşlar ve kusursuz montaj bir arada.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-page="/Iletisim/Index" class="btn btn-lg px-4 py-3 shadow" style="background-color: #6b5344; color: white; border-radius: 15px; font-weight: 600;">Ücretsiz Keşif İste</a>
+            <a href="#kategoriler" class="btn btn-lg btn-custom-outline px-4 py-3 shadow-sm">Koleksiyonu Gör</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center g-4 mb-5">
+        <div class="col-md-5">
+            <div class="card h-100 border-0 shadow-sm transition-card" style="border-radius: 25px; background: #ffffff;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 bg-light rounded-circle me-3">🖼️</div>
+                        <h4 class="fw-bold m-0">Geniş Ürün Yelpazesi</h4>
+                    </div>
+                    <p class="text-muted small">Stor, Zebra, Fon ve Akıllı Perde sistemlerinde yüzlerce renk ve doku seçeneği sizi bekliyor.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card h-100 border-0 shadow-sm transition-card" style="border-radius: 25px; background: #6b5344; color: white;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 bg-white bg-opacity-25 rounded-circle me-3">📅</div>
+                        <h4 class="fw-bold m-0 text-white">Online Randevu</h4>
+                    </div>
+                    <p class="small text-white opacity-75">Vaktiniz değerli. Yerinde ölçü ve katalog sunumu için saniyeler içinde randevunuzu oluşturun.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="kategoriler" class="py-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: #6b5344;">Popüler Kategoriler</h2>
+            <p class="text-muted">Mekanınıza en uygun stili seçin</p>
+        </div>
+        <div class="row g-3">
+            <div class="col-6 col-md-3">
+                <div class="category-box text-center p-4 border rounded-4 transition-card shadow-sm bg-white">
+                    <i class="fas fa-layer-group mb-3 d-block" style="font-size: 2.5rem; color: #6b5344;"></i>
+                    <h6 class="fw-bold">Zebra Perde</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="category-box text-center p-4 border rounded-4 transition-card shadow-sm bg-white">
+                    <i class="fas fa-scroll mb-3 d-block" style="font-size: 2.5rem; color: #6b5344;"></i>
+                    <h6 class="fw-bold">Fon Perde</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="category-box text-center p-4 border rounded-4 transition-card shadow-sm bg-white">
+                    <i class="fas fa-window-maximize mb-3 d-block" style="font-size: 2.5rem; color: #6b5344;"></i>
+                    <h6 class="fw-bold">Stor Perde</h6>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="category-box text-center p-4 border rounded-4 transition-card shadow-sm bg-white">
+                    <i class="fas fa-microchip mb-3 d-block" style="font-size: 2.5rem; color: #6b5344;"></i>
+                    <h6 class="fw-bold">Akıllı Perde</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: #6b5344;">Hazır Vitrin Ürünlerimiz</h2>
+            <p class="text-muted">Özel ölçü beklemeden hemen teslim alabileceğiniz lüks perdeler</p>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.HazirPerdeler != null && Model.HazirPerdeler.Any())
+            {
+                @foreach (var urun in Model.HazirPerdeler)
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm transition-card" style="border-radius: 25px; overflow: hidden; background: #ffffff;">
+                            <img src="@urun.ResimUrl" class="card-img-top" alt="@urun.Ad" style="height: 250px; object-fit: cover;">
+
+                            <div class="card-body p-4 text-center">
+                                <span class="badge mb-3 px-3 py-2" style="background-color: #6b5344; border-radius: 10px;">@urun.Kategori</span>
+                                <h5 class="fw-bold">@urun.Ad</h5>
+                                <p class="text-muted small mb-0">@urun.Aciklama</p>
+                                <h4 class="fw-bold mt-4" style="color: #6b5344;">@urun.Fiyat.ToString("C")</h4>
+                            </div>
+
+                            <div class="card-footer bg-white border-0 pb-4 text-center">
+                                <button class="btn btn-custom-outline w-75 py-2">🛒 Sepete Ekle</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="py-5 bg-light rounded-5 px-4 my-5 shadow-sm">
+        <h2 class="text-center fw-bold mb-5" style="color: #6b5344;">4 Adımda Yeni Perdeleriniz</h2>
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <div class="step-icon mx-auto mb-3"><i class="fas fa-calendar-check"></i></div>
+                <h6 class="fw-bold">Randevu</h6>
+                <p class="small text-muted">Web sitemizden randevunuzu alın.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-icon mx-auto mb-3"><i class="fas fa-ruler-combined"></i></div>
+                <h6 class="fw-bold">Keşif & Ölçü</h6>
+                <p class="small text-muted">Ekiplerimiz ölçüleri alsın.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-icon mx-auto mb-3"><i class="fas fa-cut"></i></div>
+                <h6 class="fw-bold">Özel Dikim</h6>
+                <p class="small text-muted">Atölyemizde özenle hazırlayalım.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="step-icon mx-auto mb-3"><i class="fas fa-truck-ramp-box"></i></div>
+                <h6 class="fw-bold">Montaj</h6>
+                <p class="small text-muted">Kusursuz montaj ile teslim edelim.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Butonun normal hali: Çerçevesi ve yazısı kahverengi */
+    .btn-custom-outline {
+        color: #6b5344 !important;
+        border: 2px solid #6b5344 !important;
+        background-color: transparent !important;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        /* Butonun üzerine gelince (Hover) */
+        .btn-custom-outline:hover {
+            background-color: #6b5344 !important;
+            color: #ffffff !important;
+            border-color: #6b5344 !important;
+            box-shadow: 0 4px 10px rgba(107, 83, 68, 0.2);
+        }
+
+    /* Numaralı daireleri şık ikon dairelerine çevirdik */
+    .step-icon {
+        width: 60px;
+        height: 60px;
+        background: #6b5344;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 10px rgba(107, 83, 68, 0.3);
+    }
+
+    /* Üzerine gelince ikonun rengini beyaz yap */
+    .category-box:hover i {
+        color: white !important;
+    }
+
+    /* Kartların üzerine gelince hafifçe yukarı kalkma efekti */
+    .transition-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .transition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+</style>

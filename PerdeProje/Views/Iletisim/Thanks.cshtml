@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Randevu Alındı";
+}
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-primary">Teşekkürler</h2>
+        <p>Randevunuz alındı. Aşağıdaki bilgilerle en kısa sürede sizinle iletişime geçeceğiz.</p>
+        <ul>
+            <li><strong>İsim:</strong> @TempData["RandevuIsim"]</li>
+            <li><strong>Telefon:</strong> @TempData["RandevuTelefon"]</li>
+            <li><strong>Model:</strong> @TempData["RandevuModel"]</li>
+            <li><strong>Tarihi:</strong> @TempData["RandevuTarihi"]</li>
+        </ul>
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Ana Sayfaya Dön</a>
+    </div>
+</section>

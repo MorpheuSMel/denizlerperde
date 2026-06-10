@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+  <rect width="900" height="650" fill="#fbf8f2"/>
+  <rect x="125" y="70" width="650" height="500" rx="24" fill="#fff" stroke="#e7ded2" stroke-width="10"/>
+  <rect x="190" y="105" width="520" height="400" fill="#eef8fb"/>
+  <g fill="#f8efdf" opacity=".64">
+    <path d="M190 100h105v415c-30 20-64 20-105 0z"/>
+    <path d="M295 100h105v415c-30 20-64 20-105 0z"/>
+    <path d="M400 100h105v415c-30 20-64 20-105 0z"/>
+    <path d="M505 100h105v415c-30 20-64 20-105 0z"/>
+    <path d="M610 100h105v415c-30 20-64 20-105 0z"/>
+  </g>
+  <rect x="145" y="86" width="610" height="18" rx="9" fill="#6b5344"/>
+  <text x="450" y="610" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#6b5344">Duz Ekru Tul Perde</text>
+</svg>

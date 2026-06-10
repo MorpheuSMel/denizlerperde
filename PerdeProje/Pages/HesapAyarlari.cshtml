@@ -1,0 +1,358 @@
+﻿@page "/hesap-ayarlari"
+@model PerdeProje.Pages.HesapAyarlariModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesap Ayarları - Denizler Perde</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+            body {
+                background-color: #fcfbfa;
+                font-family: system-ui, sans-serif;
+            }
+
+            .main-container {
+                max-width: 1100px;
+                margin: 40px auto;
+                padding: 0 20px;
+            }
+
+            .card-settings {
+                background: #ffffff;
+                border-radius: 24px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.01);
+                border: none;
+            }
+
+            .nav-pills .nav-link {
+                color: #6b5344;
+                font-weight: 600;
+                padding: 12px 20px;
+                border-radius: 12px;
+                margin-bottom: 8px;
+                transition: all 0.2s;
+                text-align: left;
+                border: none;
+                background: none;
+                width: 100%;
+            }
+
+                .nav-pills .nav-link.active {
+                    background-color: #6b5344;
+                    color: #fff;
+                }
+
+                .nav-pills .nav-link:hover:not(.active) {
+                    background-color: #e6dfda;
+                }
+
+            .form-control-custom {
+                background-color: #f8f9fa;
+                border: none;
+                border-radius: 12px;
+                padding: 12px 15px;
+            }
+
+            .btn-save {
+                background-color: #6b5344;
+                color: white;
+                border-radius: 12px;
+                font-weight: 600;
+                padding: 10px 25px;
+                border: none;
+            }
+
+                .btn-save:hover {
+                    background-color: #523f33;
+                    color: white;
+                }
+
+            .empty-state {
+                padding: 30px;
+                border: 2px dashed #e6dfda;
+                border-radius: 16px;
+                text-align: center;
+                color: #a18c81;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="/KullaniciSayfasi" class="btn btn-outline-secondary px-3 py-2" style="border-radius: 15px;"><i class="fas fa-arrow-left me-2"></i>Panele Geri Dön</a>
+            <h4 class="fw-bold m-0" style="color: #6b5344;"><i class="fas fa-cog me-2"></i>Hesap Ayarları</h4>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.BilgiMesaji))
+        {
+            <div class="alert alert-success rounded-3 fw-bold mb-4">@Model.BilgiMesaji</div>
+        }
+
+        <div class="card-settings p-4">
+            <div class="row">
+                <div class="col-md-3 border-end">
+                    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <button class="nav-link active" id="v-pills-security-tab" data-bs-toggle="pill" data-bs-target="#v-pills-security" type="button" role="tab"><i class="fas fa-shield-alt me-2"></i>Profil & Güvenlik</button>
+                        <button class="nav-link" id="v-pills-address-tab" data-bs-toggle="pill" data-bs-target="#v-pills-address" type="button" role="tab"><i class="fas fa-map-marker-alt me-2"></i>Adres Bilgileri</button>
+                        <button class="nav-link" id="v-pills-cards-tab" data-bs-toggle="pill" data-bs-target="#v-pills-cards" type="button" role="tab"><i class="fas fa-credit-card me-2"></i>Kart Bilgileri</button>
+                        <button class="nav-link" id="v-pills-help-tab" data-bs-toggle="pill" data-bs-target="#v-pills-help" type="button" role="tab"><i class="fas fa-question-circle me-2"></i>Yardım & Destek</button>
+                    </div>
+                </div>
+
+                <div class="col-md-9 ps-md-4">
+                    <div class="tab-content" id="v-pills-tabContent">
+
+                        <div class="tab-pane fade show active" id="v-pills-security" role="tabpanel">
+                            <h5 class="fw-bold mb-3" style="color: #6b5344;">Profil ve Güvenlik Ayarları</h5>
+                            <form method="post" asp-page-handler="ProfilGuncelle">
+                                <div class="row g-3">
+                                    <div class="col-sm-6">
+                                        <label class="small fw-bold text-muted mb-1">Adınız</label>
+                                        <input type="text" asp-for="Ad" class="form-control form-control-custom" required />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="small fw-bold text-muted mb-1">Soyadınız</label>
+                                        <input type="text" asp-for="Soyad" class="form-control form-control-custom" required />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="small fw-bold text-muted mb-1">E-Posta Adresi</label>
+                                        <input type="email" asp-for="Eposta" class="form-control form-control-custom" required />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="small fw-bold text-muted mb-1">Telefon Numarası</label>
+                                        <input type="tel" asp-for="Telefon" class="form-control form-control-custom phone-mask" placeholder="0xxx xxx xx xx" maxlength="14" inputmode="numeric" required />
+                                    </div>
+                                    <div class="col-12 border-top pt-3 mt-4">
+                                        <h6 class="fw-bold mb-2" style="color: #6b5344;">Şifre Değiştir</h6>
+                                        <label class="small text-muted mb-2">Şifrenizi değiştirmek istemiyorsanız boş bırakın.</label>
+                                        <input type="password" asp-for="YeniSifre" class="form-control form-control-custom" placeholder="Boş bırakırsanız değişmez" minlength="6" autocomplete="new-password" />
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-save mt-4">Değişiklikleri Kaydet</button>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-address" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold m-0" style="color: #6b5344;">Kayıtlı Adreslerim</h5>
+                                <button class="btn btn-sm btn-outline-dark" style="border-radius: 10px;" data-bs-toggle="modal" data-bs-target="#adresEkleModal"><i class="fas fa-plus me-1"></i>Yeni Adres Ekle</button>
+                            </div>
+
+                            @if (Model.KullaniciAdresleri.Any())
+                            {
+                                foreach (var adres in Model.KullaniciAdresleri)
+                                {
+                                    <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-secondary mb-1">@adres.Baslik</span>
+                                            <p class="m-0 small text-muted">@adres.AcikAdres</p>
+                                        </div>
+                                        <button class="btn btn-link text-danger"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="empty-state text-center">
+                                    <i class="fas fa-map-marked-alt fa-2x mb-2"></i>
+                                    <p class="m-0 small">Kayıtlı bir adresiniz bulunmamaktadır.</p>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-cards" role="tabpanel">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold m-0" style="color: #6b5344;">Kayıtlı Kartlarım</h5>
+                                <button class="btn btn-sm btn-outline-dark" style="border-radius: 10px;" data-bs-toggle="modal" data-bs-target="#kartEkleModal"><i class="fas fa-plus me-1"></i>Yeni Kart Ekle</button>
+                            </div>
+
+                            @if (Model.KullaniciKartlari.Any())
+                            {
+                                foreach (var kart in Model.KullaniciKartlari)
+                                {
+                                    <div class="p-3 border rounded-3 mb-2 d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-credit-card text-secondary fa-2x me-3"></i>
+                                            <div>
+                                                <h6 class="m-0 fw-bold">@kart.KartBasligi <span class="small text-muted fw-normal">(@kart.KartUzerindekiIsim)</span></h6>
+                                                <small class="text-muted fw-mono">@kart.KartNumarasi | SKT: @kart.SonKullanmaTarihi</small>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-link text-danger"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="empty-state text-center">
+                                    <i class="fas fa-credit-card fa-2x mb-2"></i>
+                                    <p class="m-0 small">Kayıtlı bir kartınız bulunmamaktadır.</p>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-help" role="tabpanel">
+                            <h5 class="fw-bold mb-3" style="color: #6b5344;">Yardım ve Destek Merkezi</h5>
+                            <p class="text-muted small">Denizler Perde müşteri hizmetlerine doğrudan ulaşın veya sıkça sorulan soruları inceleyin.</p>
+                            <div class="accordion accordion-flush border rounded-3" id="faqAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q1">Siparişimin montaj süresi nedir?</button></h2>
+                                    <div id="q1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Perde siparişleriniz üretime alındıktan sonra ortalama 5-7 iş günü içerisinde hazırlanıp montaj ekiplerimizce teslim edilir.</div></div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">Ölçüyü yanlış alırsam ne olur?</button></h2>
+                                    <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body small text-muted">Ölçüsel sorunlarda teknik ekibimiz adresinize gelerek gerekli düzeltme işlemlerini yerinde gerçekleştirmektedir.</div></div>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-3 bg-light rounded-3 text-center">
+                                <h6 class="fw-bold m-0">📞 Müşteri Destek Hattı: 0850 000 00 00</h6>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="adresEkleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-header border-0">
+                    <h5 class="fw-bold" style="color: #6b5344;"><i class="fas fa-map-marker-alt me-2"></i>Yeni Adres Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-shadow="none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-page-handler="AdresEkle">
+                    <div class="modal-body pt-0">
+                        <div class="mb-3">
+                            <label class="small fw-bold text-muted mb-1">Adres Başlığı</label>
+                            <input type="text" asp-for="YeniAdresBaslik" class="form-control form-control-custom" placeholder="Örn: Evim, İş Yerim" required />
+                        </div>
+                        <div class="mb-2">
+                            <label class="small fw-bold text-muted mb-1">Açık Adres</label>
+                            <textarea asp-for="YeniAcikAdres" class="form-control form-control-custom" rows="3" placeholder="Mahalle, Cadde, Sokak, Kapı No, İlçe/İl..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light" style="border-radius: 12px;" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-save">Adresi Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="kartEkleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-header border-0">
+                    <h5 class="fw-bold" style="color: #6b5344;"><i class="fas fa-credit-card me-2"></i>Yeni Kart Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-shadow="none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-page-handler="KartEkle">
+                    <div class="modal-body pt-0">
+                        <div class="mb-3">
+                            <label class="small fw-bold text-muted mb-1">Kart Tanımı / Başlığı</label>
+                            <input type="text" asp-for="YeniKartBasligi" class="form-control form-control-custom" placeholder="Örn: Bonus Kartım" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="small fw-bold text-muted mb-1">Kart Üzerindeki İsim</label>
+                            <input type="text" asp-for="YeniKartUzerindekiIsim" class="form-control form-control-custom" placeholder="AD SOYAD" style="text-transform: uppercase;" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="small fw-bold text-muted mb-1">Kart Numarası</label>
+                            <input type="text" asp-for="YeniKartNumarasi" class="form-control form-control-custom" placeholder="0000 0000 0000 0000" maxlength="19" required />
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="small fw-bold text-muted mb-1">Son Kullanma (AA/YY)</label>
+                                <input type="text" asp-for="YeniSonKullanmaTarihi" class="form-control form-control-custom" placeholder="MM/YY" maxlength="5" required />
+                            </div>
+                            <div class="col-6">
+                                <label class="small fw-bold text-muted mb-1">CVV (Güvenlik Kodu)</label>
+                                <input type="password" asp-for="YeniCvv" class="form-control form-control-custom" placeholder="***" maxlength="3" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light" style="border-radius: 12px;" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-save">Kartı Güvenle Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        // 1. Kart Numarası Formatlayıcı (4 Hanede bir boşluk)
+        const kartNoInput = document.getElementById("YeniKartNumarasi");
+        if (kartNoInput) {
+        kartNoInput.addEventListener("input", function (e) {
+        // Sadece sayıları al
+        let temizVeri = e.target.value.replace(/\D/g, "");
+        // Her 4 karakterde bir boşluk bırakacak şekilde grupla (Maksimum 16 hane sayı + 3 boşluk = 19 karakter)
+        let formatliVeri = temizVeri.match(/.{1,4}/g);
+
+        e.target.value = formatliVeri ? formatliVeri.join(" ") : "";
+        });
+        }
+
+        // 2. Son Kullanma Tarihi Formatlayıcı (AA/YY arasına eğik çizgi)
+        const sktInput = document.getElementById("YeniSonKullanmaTarihi");
+        if (sktInput) {
+        sktInput.addEventListener("input", function (e) {
+        let temizVeri = e.target.value.replace(/\D/g, "");
+
+        if (temizVeri.length >= 2) {
+        // İlk iki haneden sonra otomatik / ekle
+        e.target.value = temizVeri.substring(0, 2) + "/" + temizVeri.substring(2, 4);
+        } else {
+        e.target.value = temizVeri;
+        }
+        });
+
+        // Kullanıcı silme (Backspace) tuşuna bastığında / işaretinde takılmaması için ek kontrol
+        sktInput.addEventListener("keydown", function (e) {
+        if (e.key === "Backspace" && e.target.value.length === 3) {
+        e.target.value = e.target.value.substring(0, 2);
+        e.preventDefault();
+        }
+        });
+        }
+
+        // 3. CVV Alanına sadece sayı girilebilmesi kontrolü
+        const cvvInput = document.getElementById("YeniCvv");
+        if (cvvInput) {
+        cvvInput.addEventListener("input", function (e) {
+        e.target.value = e.target.value.replace(/\D/g, "");
+        });
+        }
+
+        document.querySelectorAll('.phone-mask').forEach(function (input) {
+        function formatPhone() {
+        const digits = input.value.replace(/\D/g, '').slice(0, 11);
+        const parts = [];
+        if (digits.length > 0) parts.push(digits.slice(0, 4));
+        if (digits.length > 4) parts.push(digits.slice(4, 7));
+        if (digits.length > 7) parts.push(digits.slice(7, 9));
+        if (digits.length > 9) parts.push(digits.slice(9, 11));
+        input.value = parts.join(' ');
+        }
+
+        input.addEventListener('input', formatPhone);
+        formatPhone();
+        });
+        });
+    </script>
+</body>
+</html>

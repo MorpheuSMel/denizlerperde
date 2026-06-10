@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+  <rect width="900" height="650" fill="#f6f7f6"/>
+  <rect x="150" y="70" width="600" height="500" rx="24" fill="#fff" stroke="#dfe4df" stroke-width="10"/>
+  <rect x="205" y="120" width="490" height="365" fill="#eaf6fb"/>
+  <rect x="205" y="105" width="490" height="305" rx="4" fill="#dfd6ca"/>
+  <rect x="190" y="88" width="520" height="30" rx="15" fill="#6b5344"/>
+  <rect x="615" y="82" width="92" height="42" rx="12" fill="#4a3a2f"/>
+  <circle cx="662" cy="103" r="10" fill="#d4a574"/>
+  <rect x="365" y="450" width="170" height="58" rx="18" fill="#ffffff" stroke="#6b5344" stroke-width="5"/>
+  <circle cx="415" cy="479" r="14" fill="#6b5344"/>
+  <circle cx="485" cy="479" r="14" fill="#d4a574"/>
+  <text x="450" y="610" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#6b5344">Motorlu Akilli Perde</text>
+</svg>

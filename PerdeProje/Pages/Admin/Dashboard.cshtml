@@ -1,0 +1,994 @@
+@page "/Admin/Dashboard"
+
+@model PerdeProje.Pages.Admin.DashboardModel
+
+@{
+
+    Layout = null;
+
+}
+
+
+
+<!DOCTYPE html>
+
+<html lang="tr">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Denizler Perde - Entegre Akış Yönetimi</title>
+
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+
+
+    <style>
+
+            :root {
+                /* Web Sitesi Ana Renkleri - Denizler Perde */
+
+                --primary: #6b5344;
+                --primary-dark: #4a3a2f;
+                --accent: #d4a574;
+                --accent-light: #e8d5c4;
+                --bg-light: #f9f7f4;
+                --bg-white: #fff;
+                --text-dark: #2d2d2d;
+                --text-muted: #7a7a7a;
+                /* Dashboard Aktivite Renkleri */
+
+                --color-randevu: #c2574f;
+                --color-tezgah: #a67d6d;
+                --color-dikim: #8b6f5d;
+                --color-kargo: #6b5344;
+                --color-saha: #d4a574;
+                --bg-main: #f9f7f4;
+                --bg-card: #ffffff;
+                --border-color: #e8d5c4;
+            }
+
+
+
+            body {
+                background-color: var(--bg-main);
+                color: var(--text-dark);
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                margin: 0;
+                padding-bottom: 140px;
+                overflow-x: hidden;
+            }
+
+
+
+            .glass-nav {
+                background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+                backdrop-filter: blur(10px);
+                border-bottom: 2px solid var(--accent);
+                padding: 18px 40px;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+
+
+            .nav-logo {
+                font-weight: 800;
+                font-size: 1.2rem;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                margin: 0;
+                color: var(--bg-white);
+            }
+
+
+
+                .nav-logo span {
+                    color: var(--accent);
+                }
+
+
+
+            .board-container {
+                padding: 28px 40px 10px 40px;
+            }
+
+
+
+            .process-row {
+                background: linear-gradient(135deg, rgba(107, 83, 68, 0.05) 0%, rgba(212, 165, 116, 0.05) 100%);
+                border-radius: 16px;
+                padding: 20px;
+                margin-bottom: 25px;
+                transition: all 0.3s ease;
+                border: 1px solid var(--border-color);
+            }
+
+
+
+            .row-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid var(--accent-light);
+            }
+
+
+
+            .row-title {
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: var(--primary);
+            }
+
+
+
+            .row-badge {
+                background: var(--accent-light);
+                font-size: 0.8rem;
+                font-weight: 700;
+                padding: 4px 12px;
+                border-radius: 20px;
+                color: var(--primary);
+                border: 1px solid var(--accent);
+            }
+
+
+
+            .cards-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 15px;
+            }
+
+
+
+            .flow-card {
+                background: var(--bg-card);
+                border-radius: 14px;
+                padding: 18px;
+                box-shadow: 0 2px 8px rgba(107, 83, 68, 0.08);
+                border: 2px solid var(--border-color);
+                transition: all 0.2s ease;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+
+
+                .flow-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(107, 83, 68, 0.12);
+                    border-color: var(--accent);
+                }
+
+
+
+            .customer-name {
+                font-weight: 700;
+                font-size: 1.05rem;
+                margin-bottom: 3px;
+                color: var(--primary);
+            }
+
+
+
+            .product-tag {
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: var(--accent);
+                margin-bottom: 12px;
+            }
+
+
+
+            .specs-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                background: var(--accent-light);
+                padding: 10px;
+                border-radius: 8px;
+                margin-bottom: 12px;
+                font-size: 0.8rem;
+            }
+
+
+
+            .spec-label {
+                color: var(--primary);
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+
+
+
+            .spec-val {
+                font-weight: 700;
+                color: var(--text-dark);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+
+
+            .card-footer-actions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-top: 2px solid var(--border-color);
+                padding-top: 10px;
+                margin-top: 4px;
+            }
+
+
+
+            .btn-flow-next {
+                background: none;
+                border: none;
+                color: var(--accent);
+                font-size: 0.8rem;
+                font-weight: 700;
+                cursor: pointer;
+                padding: 4px 8px;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+
+
+                .btn-flow-next:hover {
+                    background: var(--accent-light);
+                    color: var(--primary);
+                }
+
+
+
+            .bottom-stock-bar {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+                backdrop-filter: blur(10px);
+                padding: 15px 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                color: var(--bg-white);
+                box-shadow: 0 -5px 20px rgba(107, 83, 68, 0.2);
+                z-index: 999;
+            }
+
+
+
+            .stock-track-wrapper {
+                display: flex;
+                align-items: center;
+                gap: 30px;
+                overflow-x: auto;
+            }
+
+
+
+            .stock-track-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 0.85rem;
+                border-right: 1px solid var(--accent);
+                padding-right: 30px;
+                white-space: nowrap;
+            }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <nav class="glass-nav">
+
+        <h1 class="nav-logo">DENİZLER PERDE <span>ENTEGRE AKIŞ YÖNETİMİ</span></h1>
+
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-light);">
+
+            Atölye ve Sipariş Şefi: <strong style="color: var(--accent);">Deniz Bey</strong>
+
+        </div>
+
+    </nav>
+
+
+
+    <div class="board-container">
+
+
+
+        <!-- SATIR 1: YENİ RANDEVULAR -->
+
+        <div class="process-row row-randevu">
+
+            <div class="row-header">
+
+                <h2 class="row-title" style="color: var(--color-randevu)"><i class="fas fa-calendar-alt"></i> 1. YENİ RANDEVULAR</h2>
+
+                <span class="row-badge">@Model.YeniRandevular.Count Talep</span>
+
+            </div>
+
+            <div class="cards-grid">
+
+                @foreach (var r in Model.YeniRandevular)
+
+                {
+
+                    <div class="flow-card">
+
+                        <div>
+
+                            <div class="customer-name">@r.MusteriAdi</div>
+
+                            <div class="product-tag text-truncate">@r.PerdeTuru</div>
+
+                            <div class="specs-grid" style="background: rgba(194, 87, 79, 0.1);">
+
+                                <div>
+
+                                    <div class="spec-label">SAAT</div>
+
+                                    <div class="spec-val" style="color: #c2574f">@r.Olcu</div>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="spec-label">ADRES / NOT</div>
+
+                                    <div class="spec-val" title="@r.PileTipi">@r.PileTipi</div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer-actions">
+
+                            <span style="font-size: 0.75rem; font-weight: 600; color: #c2574f;"><i class="fas fa-globe"></i> @r.DurumEtiketi</span>
+
+                            <button type="button" onclick="updateStatus(@r.Id, 'Ölçü Alındı', 'randevu')" class="btn-flow-next" style="color: #c2574f; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;">Ölçü Alındı / Onayla <i class="fas fa-arrow-right ms-1"></i></button>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SATIR 2: KESİM BEKLEYENLER -->
+
+        <div class="process-row row-atolye">
+
+            <div class="row-header">
+
+                <h2 class="row-title" style="color: var(--color-tezgah)"><i class="fas fa-layer-group"></i> 2. TEZGAH / KESİM</h2>
+
+                <span class="row-badge">@Model.KesimBekleyenler.Count İş</span>
+
+            </div>
+
+            <div class="cards-grid">
+
+                @foreach (var s in Model.KesimBekleyenler)
+
+                {
+
+                    <div class="flow-card">
+
+                        <div>
+
+                            <div class="customer-name">@s.MusteriAdi</div>
+
+                            <div class="product-tag">@s.PerdeTuru</div>
+
+                            <div class="specs-grid" style="background: rgba(166, 125, 109, 0.1);">
+
+                                <div>
+
+                                    <div class="spec-label">ÖLÇÜ</div>
+
+                                    <div class="spec-val">@s.Olcu</div>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="spec-label">PİLE DÜZENİ</div>
+
+                                    <div class="spec-val">@s.PileTipi</div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer-actions">
+
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #a67d6d;"><i class="fas fa-cut"></i> @s.DurumEtiketi</span>
+
+                            <button type="button" onclick="updateStatus(@s.Id, 'Terziye Gönderiliyor', 'siparis')" class="btn-flow-next" style="color: #a67d6d; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;">Terziye Gönder <i class="fas fa-arrow-right ms-1"></i></button>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SATIR 3: TERZİ DİKİMİNDEKİLER -->
+
+        <div class="process-row row-atolye">
+
+            <div class="row-header">
+
+                <h2 class="row-title" style="color: var(--color-dikim)"><i class="fas fa-cut"></i> 3. TERZİ DİKİMİ</h2>
+
+                <span class="row-badge">@Model.TerziDikimindekiler.Count Makine</span>
+
+            </div>
+
+            <div class="cards-grid">
+
+                @foreach (var t in Model.TerziDikimindekiler)
+
+                {
+
+                    <div class="flow-card">
+
+                        <div>
+
+                            <div class="customer-name">@t.MusteriAdi</div>
+
+                            <div class="product-tag">@t.PerdeTuru</div>
+
+                            <div class="specs-grid" style="background: rgba(139, 111, 93, 0.1);">
+
+                                <div>
+
+                                    <div class="spec-label">NET ÖLÇÜ</div>
+
+                                    <div class="spec-val">@t.Olcu</div>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="spec-label">METRAJ</div>
+
+                                    <div class="spec-val" style="color: #8b6f5d">@t.KumasMetraji Mt</div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer-actions">
+
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #8b6f5d;"><i class="fas fa-clock"></i> @t.DurumEtiketi</span>
+
+                            <button type="button" onclick="updateStatus(@t.Id, 'Kargoya Teslim', 'siparis')" class="btn-flow-next" style="color: #8b6f5d; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;">Kargoya Teslim <i class="fas fa-arrow-right ms-1"></i></button>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SATIR 4: SATIŞI YAPILMIŞ / KARGO BEKLEYENLER -->
+
+        <div class="process-row row-teslimat">
+
+            <div class="row-header">
+
+                <h2 class="row-title" style="color: #6b5344"><i class="fas fa-box"></i> 4. KARGO / SEVK</h2>
+
+                <span class="row-badge">@Model.KargoBekleyenler.Count Paket</span>
+
+            </div>
+
+            <div class="cards-grid">
+
+                @foreach (var k in Model.KargoBekleyenler)
+
+                {
+
+                    <div class="flow-card">
+
+                        <div>
+
+                            <div class="customer-name">@k.MusteriAdi</div>
+
+                            <div class="product-tag">@k.PerdeTuru</div>
+
+                            <div class="specs-grid" style="background: rgba(107, 83, 68, 0.1);">
+
+                                <div>
+
+                                    <div class="spec-label">PAKET İÇERİĞİ</div>
+
+                                    <div class="spec-val">@k.Olcu</div>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="spec-label">KARGO FİRMASI</div>
+
+                                    <div class="spec-val" style="color: #6b5344">@k.PileTipi</div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer-actions">
+
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #6b5344;"><i class="fas fa-shipping-fast"></i> @k.DurumEtiketi</span>
+
+                            <button type="button" onclick="updateStatus(@k.Id, 'Kargoya Verildi', 'siparis')" class="btn-flow-next" style="color: #6b5344; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;"><i class="fas fa-barcode"></i> Barkod Bas</button>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SATIR 5: SAHADA / MONTAJ PLANLARI -->
+
+        <div class="process-row row-teslimat">
+
+            <div class="row-header">
+
+                <h2 class="row-title" style="color: #d4a574"><i class="fas fa-truck-loading"></i> 5. BUGÜN SAHADA / MONTAJ</h2>
+
+                <span class="row-badge">@Model.SahaMontajdakiler.Count Ev</span>
+
+            </div>
+
+            <div class="cards-grid">
+
+                @foreach (var m in Model.SahaMontajdakiler)
+
+                {
+
+                    <div class="flow-card">
+
+                        <div>
+
+                            <div class="customer-name">@m.MusteriAdi</div>
+
+                            <div class="product-tag">@m.PerdeTuru</div>
+
+                            <div class="specs-grid" style="background: rgba(212, 165, 116, 0.1);">
+
+                                <div>
+
+                                    <div class="spec-label">MONTAJ SAATİ</div>
+
+                                    <div class="spec-val" style="color: #d4a574">@m.Olcu</div>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="spec-label">BÖLGE</div>
+
+                                    <div class="spec-val">@m.PileTipi</div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer-actions">
+
+                            <button type="button" onclick="updateStatus(@m.Id, 'Teslimat Başladı', 'siparis')" class="btn-flow-next" style="color: #6b5344; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;"><i class="fas fa-print"></i> Fiş</button>
+
+                            <button type="button" onclick="updateStatus(@m.Id, 'Teslim Edildi', 'siparis')" class="btn-flow-next" style="color: #d4a574; font-weight: 800; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;"><i class="fas fa-check-double"></i> Teslim Et</button>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+
+
+    <!-- KRİTİK STOK ALARMLARI -->
+
+    <div class="bottom-stock-bar">
+
+        <div class="stock-track-wrapper">
+
+            <span style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: var(--accent);"><i class="fas fa-exclamation-triangle"></i> KRİTİK RULO ALARMLARI:</span>
+
+            @foreach (var kumas in Model.KritikKumaslar)
+
+            {
+
+                <div class="stock-track-item">
+
+                    <div>
+
+                        <strong style="display:block; font-size: 0.8rem;">@kumas.UrunAdi (@kumas.UrunKodu)</strong>
+
+                        <small style="color: var(--accent-light);">Rulo No: #@kumas.SeriNo</small>
+
+                    </div>
+
+                    <span class="badge" style="background: var(--accent); color: var(--primary); font-weight: 700; margin-left: 8px;">@kumas.StokMiktar Mt Kaldı!</span>
+
+                </div>
+
+            }
+
+        </div>
+
+        <button id="factoryOrderBtn" type="button" onclick="stokSiparisiOlustur()" class="btn btn-sm" style="background: var(--accent); color: var(--primary); font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none;"><i class="fas fa-shopping-cart me-1"></i> FABRİKADAN SİPARİŞ ET</button>
+
+    </div>
+
+
+
+    <!-- Filtreleme Scripti -->
+
+    <script>
+
+            // Modal fonksiyonu - Durumu güncelle
+
+            function stokSiparisiOlustur() {
+
+                const modal = new bootstrap.Modal(document.getElementById('confirmModal'), {
+
+                    backdrop: 'static',
+
+                    keyboard: false
+
+                });
+
+
+
+                document.getElementById('modalTitle').textContent = 'Kritik stoklar için fabrika siparişi oluşturulsun mu?';
+
+                document.getElementById('modalMessage').textContent = 'Listelenen kritik kumaş ruloları için satın alma talebi hazırlanacak.';
+
+
+
+                document.getElementById('confirmBtn').onclick = function() {
+
+                    const siparisNo = 'FRK-' + new Date().toISOString().slice(2, 10).replaceAll('-', '') + '-' + Math.floor(Math.random() * 900 + 100);
+
+                    const btn = document.getElementById('factoryOrderBtn');
+
+                    btn.disabled = true;
+
+                    btn.innerHTML = '<i class="fas fa-check me-1"></i> SİPARİŞ OLUŞTURULDU';
+
+                    btn.style.opacity = '0.85';
+
+                    modal.hide();
+
+                    showSuccessMessage('Fabrika siparişi oluşturuldu. Talep no: ' + siparisNo);
+
+                };
+
+
+
+                modal.show();
+
+            }
+
+
+
+            function updateStatus(id, newStatus, type) {
+
+                // Modal göster
+
+                const modal = new bootstrap.Modal(document.getElementById('confirmModal'), {
+
+                    backdrop: 'static',
+
+                    keyboard: false
+
+                });
+
+
+
+                document.getElementById('modalTitle').textContent = newStatus + ' durumuna çevir?';
+
+                document.getElementById('modalMessage').textContent = 'Bu işlemi onaylıyor musunuz?';
+
+
+
+                // Onay butonuna tıklandığında
+
+                document.getElementById('confirmBtn').onclick = function() {
+
+                    updateStatusAjax(id, newStatus, type);
+
+                    modal.hide();
+
+                };
+
+
+
+                modal.show();
+
+            }
+
+
+
+            // AJAX ile durumu güncelle
+
+            function updateStatusAjax(id, newStatus, type) {
+
+                const url = type === 'randevu'
+
+                    ? `/Admin/Dashboard?handler=UpdateRandevuStatus&id=${id}&newStatus=${encodeURIComponent(newStatus)}`
+
+                    : `/Admin/Dashboard?handler=UpdateSiparisStatus&id=${id}&newStatus=${encodeURIComponent(newStatus)}`;
+
+
+
+                fetch(url, { method: 'GET' })
+
+                    .then(response => {
+
+                        if (!response.ok) {
+
+                            throw new Error('Durum güncellenemedi.');
+
+                        }
+
+                        return response.json();
+
+                    })
+
+                    .then(() => {
+
+                        // Başarı mesajı göster
+
+                        showSuccessModal(newStatus);
+
+                        // 2 saniye sonra sayfayı yenile
+
+                        setTimeout(() => location.reload(), 2000);
+
+                    })
+
+                    .catch(error => {
+
+                        console.error('Hata:', error);
+
+                        showErrorModal();
+
+                    });
+
+            }
+
+
+
+            // Başarı mesajı modal
+
+            function showSuccessModal(newStatus) {
+
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+
+                document.getElementById('successMessage').textContent = '✅ ' + newStatus + ' durumuna başarıyla güncellendi!';
+
+                modal.show();
+
+            }
+
+
+
+            // Hata mesajı modal
+
+            function showSuccessMessage(message) {
+
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+
+                document.getElementById('successMessage').textContent = '✅ ' + message;
+
+                modal.show();
+
+            }
+
+
+
+            function showErrorModal() {
+
+                const modal = new bootstrap.Modal(document.getElementById('errorModal'));
+
+                modal.show();
+
+            }
+
+    </script>
+
+
+
+    <!-- Onay Modal -->
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content" style="border-radius: 20px; border: 2px solid var(--accent);">
+
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; border: none;">
+
+                    <h5 class="modal-title fw-bold" id="modalTitle">Onay</h5>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <div class="modal-body" style="padding: 25px;">
+
+                    <p id="modalMessage" style="font-size: 1.05rem; color: var(--text-dark);">Bu işlemi onaylıyor musunuz?</p>
+
+                </div>
+
+                <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 10px;">İptal</button>
+
+                    <button type="button" id="confirmBtn" class="btn text-white" style="background-color: var(--primary); border-radius: 10px; font-weight: 600;">Evet, Onayla</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Başarı Modal -->
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content" style="border-radius: 20px; border: 2px solid #28a745;">
+
+                <div class="modal-header" style="background-color: #28a745; color: white; border: none;">
+
+                    <h5 class="modal-title fw-bold">Başarılı</h5>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <div class="modal-body" style="padding: 25px;">
+
+                    <p id="successMessage" style="font-size: 1.05rem; color: var(--text-dark);">✅ İşlem başarıyla tamamlandı!</p>
+
+                </div>
+
+                <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" style="border-radius: 10px; font-weight: 600;">Tamam</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Hata Modal -->
+
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content" style="border-radius: 20px; border: 2px solid #dc3545;">
+
+                <div class="modal-header" style="background-color: #dc3545; color: white; border: none;">
+
+                    <h5 class="modal-title fw-bold">Hata</h5>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <div class="modal-body" style="padding: 25px;">
+
+                    <p style="font-size: 1.05rem; color: var(--text-dark);">❌ İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.</p>
+
+                </div>
+
+                <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="border-radius: 10px; font-weight: 600;">Kapat</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

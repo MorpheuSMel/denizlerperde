@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+  <rect width="900" height="650" fill="#fbfaf8"/>
+  <rect x="125" y="70" width="650" height="500" rx="24" fill="#fff" stroke="#e6ded8" stroke-width="10"/>
+  <rect x="190" y="105" width="520" height="400" fill="#eef8fb"/>
+  <g fill="#ffffff" opacity=".72">
+    <path d="M195 100h90v410c-22 22-50 22-90 0z"/>
+    <path d="M285 100h90v410c-22 22-50 22-90 0z"/>
+    <path d="M375 100h90v410c-22 22-50 22-90 0z"/>
+    <path d="M465 100h90v410c-22 22-50 22-90 0z"/>
+    <path d="M555 100h90v410c-22 22-50 22-90 0z"/>
+  </g>
+  <g stroke="#d9c9bd" stroke-width="4" fill="none" opacity=".9">
+    <path d="M235 430c25-28 50-28 75 0s50 28 75 0 50-28 75 0 50 28 75 0 50-28 75 0"/>
+    <path d="M235 470c25-28 50-28 75 0s50 28 75 0 50-28 75 0 50 28 75 0 50-28 75 0"/>
+  </g>
+  <rect x="145" y="86" width="610" height="18" rx="9" fill="#6b5344"/>
+  <text x="450" y="610" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#6b5344">Gipurlu Tul Perde</text>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+  <rect width="900" height="650" fill="#fbf4ea"/>
+  <rect x="150" y="70" width="600" height="500" rx="24" fill="#fffaf2" stroke="#e6d4bd" stroke-width="10"/>
+  <rect x="200" y="120" width="500" height="350" fill="#eff7fa"/>
+  <g>
+    <rect x="200" y="120" width="500" height="34" fill="#f6ead8" opacity=".92"/>
+    <rect x="200" y="154" width="500" height="34" fill="#c7a884" opacity=".45"/>
+    <rect x="200" y="188" width="500" height="34" fill="#f6ead8" opacity=".92"/>
+    <rect x="200" y="222" width="500" height="34" fill="#c7a884" opacity=".45"/>
+    <rect x="200" y="256" width="500" height="34" fill="#f6ead8" opacity=".92"/>
+    <rect x="200" y="290" width="500" height="34" fill="#c7a884" opacity=".45"/>
+    <rect x="200" y="324" width="500" height="34" fill="#f6ead8" opacity=".92"/>
+    <rect x="200" y="358" width="500" height="34" fill="#c7a884" opacity=".45"/>
+    <rect x="200" y="392" width="500" height="34" fill="#f6ead8" opacity=".92"/>
+  </g>
+  <rect x="185" y="95" width="530" height="24" rx="12" fill="#6b5344"/>
+  <circle cx="700" cy="505" r="24" fill="none" stroke="#6b5344" stroke-width="6"/>
+  <line x1="700" y1="119" x2="700" y2="505" stroke="#6b5344" stroke-width="4"/>
+  <text x="450" y="610" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#6b5344">Zebra Perde Krem</text>
+</svg>

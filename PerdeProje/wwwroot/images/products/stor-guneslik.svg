@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+  <rect width="900" height="650" fill="#f7f8f5"/>
+  <rect x="165" y="70" width="570" height="500" rx="24" fill="#fff" stroke="#e1ded2" stroke-width="10"/>
+  <rect x="225" y="120" width="450" height="380" fill="#eaf6fb"/>
+  <rect x="225" y="105" width="450" height="305" rx="4" fill="#d8d0c4"/>
+  <rect x="215" y="92" width="470" height="28" rx="14" fill="#6b5344"/>
+  <line x1="675" y1="120" x2="675" y2="500" stroke="#6b5344" stroke-width="4"/>
+  <circle cx="675" cy="505" r="22" fill="none" stroke="#6b5344" stroke-width="6"/>
+  <text x="450" y="610" text-anchor="middle" font-family="Arial" font-size="34" font-weight="700" fill="#6b5344">Guneslik Stor Perde</text>
+</svg>

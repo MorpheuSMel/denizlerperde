@@ -1,0 +1,96 @@
+﻿@page
+@model PerdeProje.Pages.FavorilerimModel
+@{
+    Layout = null; // Kendi tasarım stilimizi korumak için bağımsız yapıyoruz
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favori Ürünlerim - Denizler Perde</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-white shadow-sm rounded-4">
+            <h2 class="fw-bold m-0" style="color: #6b5344; font-size: 1.8rem;">
+                <i class="fas fa-heart text-danger me-2"></i> Favori Ürünlerim
+            </h2>
+            <a href="/KullaniciSayfasi" class="btn text-white px-4 py-2" style="background-color: #6b5344; border-radius: 12px; font-weight: 600; text-decoration: none;">
+                <i class="fas fa-arrow-left me-2"></i> Panele Geri Dön
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm p-4" style="border-radius: 25px; background: #ffffff;">
+            @if (Model.FavoriUrunler != null && Model.FavoriUrunler.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var favori in Model.FavoriUrunler)
+                    {
+                        <div class="col-md-4 col-sm-6">
+                            <div class="card h-100 border rounded-4 shadow-sm p-3 position-relative transition-card" style="border-radius: 18px;">
+                                <div class="text-center py-4 bg-light rounded-4 mb-3" style="font-size: 3rem;">
+                                    @if (favori.Urun != null && !string.IsNullOrEmpty(favori.Urun.ResimUrl))
+                                    {
+                                        <img src="@favori.Urun.ResimUrl" alt="@favori.Urun.Ad" style="width: 100%; height: 150px; object-fit: cover; border-radius: 12px;">
+                                    }
+                                    else
+                                    {
+                                        <span>🖼️</span>
+                                    }
+                                </div>
+                                <h5 class="fw-bold" style="color: #6b5344;">@(favori.Urun?.Ad ?? favori.UrunAdi)</h5>
+                                <p class="text-muted small m-0">@favori.Urun?.Aciklama</p>
+
+                                @if (favori.Urun != null)
+                                {
+                                    <div class="mt-2 mb-3">
+                                        <span class="fw-bold fs-5" style="color: #6b5344;">₺@favori.Urun.Fiyat.ToString("N2")</span>
+                                    </div>
+                                }
+
+                                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                    <a href="/Index" class="btn text-white btn-sm px-3 py-2 fw-bold" style="background-color: #6b5344; border-radius: 8px; text-decoration: none; font-size: 0.85rem;">
+                                        Ürünü İncele
+                                    </a>
+                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-2 py-2" style="font-size: 0.75rem;">
+                                        <i class="fas fa-heart me-1"></i> Favoride
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="mb-3" style="font-size: 3.5rem;">❤️</div>
+                    <h4 class="fw-bold" style="color: #6b5344;">Henüz Favori Ürününüz Yok</h4>
+                    <p class="text-muted small">Beğendiğiniz harika perdeleri favorilerinize ekleyerek burada saklayabilirsiniz.</p>
+                    <a href="/Index" class="btn text-white mt-3 px-4 py-2 fw-bold" style="background-color: #6b5344; border-radius: 12px; text-decoration: none;">
+                        Ürünleri Keşfet
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <style>
+            .transition-card {
+                transition: all 0.3s ease;
+            }
+
+                .transition-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 10px 20px rgba(0,0,0,0.06) !important;
+                    border-color: #6b5344 !important;
+                }
+    </style>
+
+</body>
+</html>
