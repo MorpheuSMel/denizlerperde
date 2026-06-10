@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PerdeProje.Data;
 using PerdeProje.Models;
 using PerdeProje.Pages;
@@ -71,16 +71,17 @@ app.Run();
 
 static void SeedAdmin(ApplicationDbContext db)
 {
-    var admin = db.Users.FirstOrDefault(u => u.Email == "admin@denizlerperde.com");
+    var admin = db.Users.FirstOrDefault(u => u.Email == "admin@admin.com")
+        ?? db.Users.FirstOrDefault(u => u.Email == "admin@denizlerperde.com");
     if (admin == null)
     {
         db.Users.Add(new User
         {
             Ad = "Admin",
             Soyad = "Kullanıcı",
-            Email = "admin@denizlerperde.com",
+            Email = "admin@admin.com",
             Telefon = "0532 452 11 13",
-            Sifre = PasswordHasher.HashPassword("admin123"),
+            Sifre = PasswordHasher.HashPassword("123456"),
             Rol = "Admin",
             AktifMi = true,
             OlusturmaTarihi = DateTime.Now
@@ -89,7 +90,8 @@ static void SeedAdmin(ApplicationDbContext db)
     }
 
     admin.Telefon = "0532 452 11 13";
-    admin.Sifre = PasswordHasher.HashPassword("admin123");
+    admin.Email = "admin@admin.com";
+    admin.Sifre = PasswordHasher.HashPassword("123456");
     admin.Rol = "Admin";
     admin.AktifMi = true;
 }
@@ -121,11 +123,11 @@ static void SeedCatalog(ApplicationDbContext db)
         "Zebra Perde Beyaz",
         "Zebra Perde Krem",
         "Guneslik Stor Perde",
-        "Güneslik Stor Perde",
-        "Güneşlik Stor Perde",
+        "GÃ¼neslik Stor Perde",
+        "GÃ¼neÅŸlik Stor Perde",
         "Blackout Stor Perde",
         "Gipurlu Tul Perde",
-        "Gipürlü Örme Tül Perde",
+        "GipÃ¼rlÃ¼ Ã–rme TÃ¼l Perde",
         "Duz Ekru Tul Perde",
         "Keten Fon Perde",
         "Kadife Fon Perde"
