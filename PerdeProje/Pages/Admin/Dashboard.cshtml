@@ -1,4 +1,4 @@
-@page "/Admin/Dashboard"
+﻿@page "/Admin/Dashboard"
 
 @model PerdeProje.Pages.Admin.DashboardModel
 
@@ -20,7 +20,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Denizler Perde - Entegre Akış Yönetimi</title>
+    <title>Denizler Perde - Entegre AkÄ±ÅŸ YÃ¶netimi</title>
+    <link rel="icon" type="image/png" href="~/favicon.png?v=3" />
 
 
 
@@ -313,11 +314,11 @@
 
     <nav class="glass-nav">
 
-        <h1 class="nav-logo">DENİZLER PERDE <span>ENTEGRE AKIŞ YÖNETİMİ</span></h1>
+        <h1 class="nav-logo">DENÄ°ZLER PERDE <span>ENTEGRE AKIÅ YÃ–NETÄ°MÄ°</span></h1>
 
         <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-light);">
 
-            Atölye ve Sipariş Şefi: <strong style="color: var(--accent);">Deniz Bey</strong>
+            AtÃ¶lye ve SipariÅŸ Åefi: <strong style="color: var(--accent);">Deniz Bey</strong>
 
         </div>
 
@@ -329,13 +330,13 @@
 
 
 
-        <!-- SATIR 1: YENİ RANDEVULAR -->
+        <!-- SATIR 1: YENÄ° RANDEVULAR -->
 
         <div class="process-row row-randevu">
 
             <div class="row-header">
 
-                <h2 class="row-title" style="color: var(--color-randevu)"><i class="fas fa-calendar-alt"></i> 1. YENİ RANDEVULAR</h2>
+                <h2 class="row-title" style="color: var(--color-randevu)"><i class="fas fa-calendar-alt"></i> 1. YENÄ° RANDEVULAR</h2>
 
                 <span class="row-badge">@Model.YeniRandevular.Count Talep</span>
 
@@ -381,7 +382,7 @@
 
                             <span style="font-size: 0.75rem; font-weight: 600; color: #c2574f;"><i class="fas fa-globe"></i> @r.DurumEtiketi</span>
 
-                            <button type="button" onclick="updateStatus(@r.Id, 'Ölçü Alındı', 'randevu')" class="btn-flow-next" style="color: #c2574f; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;">Ölçü Alındı / Onayla <i class="fas fa-arrow-right ms-1"></i></button>
+                            <button type="button" onclick="updateStatus(@r.Id, 'Ã–lÃ§Ã¼ AlÄ±ndÄ±', 'randevu')" class="btn-flow-next" style="color: #c2574f; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;">Ã–lÃ§Ã¼ AlÄ±ndÄ± / Onayla <i class="fas fa-arrow-right ms-1"></i></button>
 
                         </div>
 
@@ -395,15 +396,15 @@
 
 
 
-        <!-- SATIR 2: KESİM BEKLEYENLER -->
+        <!-- SATIR 2: KESÄ°M BEKLEYENLER -->
 
         <div class="process-row row-atolye">
 
             <div class="row-header">
 
-                <h2 class="row-title" style="color: var(--color-tezgah)"><i class="fas fa-layer-group"></i> 2. TEZGAH / KESİM</h2>
+                <h2 class="row-title" style="color: var(--color-tezgah)"><i class="fas fa-layer-group"></i> 2. TEZGAH / KESÄ°M</h2>
 
-                <span class="row-badge">@Model.KesimBekleyenler.Count İş</span>
+                <span class="row-badge">@Model.KesimBekleyenler.Count Ä°ÅŸ</span>
 
             </div>
 
@@ -425,7 +426,7 @@
 
                                 <div>
 
-                                    <div class="spec-label">ÖLÇÜ</div>
+                                    <div class="spec-label">Ã–LÃ‡Ãœ</div>
 
                                     <div class="spec-val">@s.Olcu</div>
 
@@ -433,7 +434,7 @@
 
                                 <div>
 
-                                    <div class="spec-label">PİLE DÜZENİ</div>
+                                    <div class="spec-label">PÄ°LE DÃœZENÄ°</div>
 
                                     <div class="spec-val">@s.PileTipi</div>
 
@@ -447,7 +448,7 @@
 
                             <span style="font-size: 0.75rem; font-weight: 700; color: #a67d6d;"><i class="fas fa-cut"></i> @s.DurumEtiketi</span>
 
-                            <button type="button" onclick="updateStatus(@s.Id, 'Terziye Gönderiliyor', 'siparis')" class="btn-flow-next" style="color: #a67d6d; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;">Terziye Gönder <i class="fas fa-arrow-right ms-1"></i></button>
+                            <button type="button" onclick="updateStatus(@s.Id, 'Terziye GÃ¶nderiliyor', 'siparis')" class="btn-flow-next" style="color: #a67d6d; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;">Terziye GÃ¶nder <i class="fas fa-arrow-right ms-1"></i></button>
 
                         </div>
 
@@ -461,13 +462,13 @@
 
 
 
-        <!-- SATIR 3: TERZİ DİKİMİNDEKİLER -->
+        <!-- SATIR 3: TERZÄ° DÄ°KÄ°MÄ°NDEKÄ°LER -->
 
         <div class="process-row row-atolye">
 
             <div class="row-header">
 
-                <h2 class="row-title" style="color: var(--color-dikim)"><i class="fas fa-cut"></i> 3. TERZİ DİKİMİ</h2>
+                <h2 class="row-title" style="color: var(--color-dikim)"><i class="fas fa-cut"></i> 3. TERZÄ° DÄ°KÄ°MÄ°</h2>
 
                 <span class="row-badge">@Model.TerziDikimindekiler.Count Makine</span>
 
@@ -491,7 +492,7 @@
 
                                 <div>
 
-                                    <div class="spec-label">NET ÖLÇÜ</div>
+                                    <div class="spec-label">NET Ã–LÃ‡Ãœ</div>
 
                                     <div class="spec-val">@t.Olcu</div>
 
@@ -527,7 +528,7 @@
 
 
 
-        <!-- SATIR 4: SATIŞI YAPILMIŞ / KARGO BEKLEYENLER -->
+        <!-- SATIR 4: SATIÅI YAPILMIÅ / KARGO BEKLEYENLER -->
 
         <div class="process-row row-teslimat">
 
@@ -557,7 +558,7 @@
 
                                 <div>
 
-                                    <div class="spec-label">PAKET İÇERİĞİ</div>
+                                    <div class="spec-label">PAKET Ä°Ã‡ERÄ°ÄÄ°</div>
 
                                     <div class="spec-val">@k.Olcu</div>
 
@@ -565,7 +566,7 @@
 
                                 <div>
 
-                                    <div class="spec-label">KARGO FİRMASI</div>
+                                    <div class="spec-label">KARGO FÄ°RMASI</div>
 
                                     <div class="spec-val" style="color: #6b5344">@k.PileTipi</div>
 
@@ -599,7 +600,7 @@
 
             <div class="row-header">
 
-                <h2 class="row-title" style="color: #d4a574"><i class="fas fa-truck-loading"></i> 5. BUGÜN SAHADA / MONTAJ</h2>
+                <h2 class="row-title" style="color: #d4a574"><i class="fas fa-truck-loading"></i> 5. BUGÃœN SAHADA / MONTAJ</h2>
 
                 <span class="row-badge">@Model.SahaMontajdakiler.Count Ev</span>
 
@@ -623,7 +624,7 @@
 
                                 <div>
 
-                                    <div class="spec-label">MONTAJ SAATİ</div>
+                                    <div class="spec-label">MONTAJ SAATÄ°</div>
 
                                     <div class="spec-val" style="color: #d4a574">@m.Olcu</div>
 
@@ -631,7 +632,7 @@
 
                                 <div>
 
-                                    <div class="spec-label">BÖLGE</div>
+                                    <div class="spec-label">BÃ–LGE</div>
 
                                     <div class="spec-val">@m.PileTipi</div>
 
@@ -643,7 +644,7 @@
 
                         <div class="card-footer-actions">
 
-                            <button type="button" onclick="updateStatus(@m.Id, 'Teslimat Başladı', 'siparis')" class="btn-flow-next" style="color: #6b5344; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;"><i class="fas fa-print"></i> Fiş</button>
+                            <button type="button" onclick="updateStatus(@m.Id, 'Teslimat BaÅŸladÄ±', 'siparis')" class="btn-flow-next" style="color: #6b5344; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;"><i class="fas fa-print"></i> FiÅŸ</button>
 
                             <button type="button" onclick="updateStatus(@m.Id, 'Teslim Edildi', 'siparis')" class="btn-flow-next" style="color: #d4a574; font-weight: 800; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit;"><i class="fas fa-check-double"></i> Teslim Et</button>
 
@@ -663,13 +664,13 @@
 
 
 
-    <!-- KRİTİK STOK ALARMLARI -->
+    <!-- KRÄ°TÄ°K STOK ALARMLARI -->
 
     <div class="bottom-stock-bar">
 
         <div class="stock-track-wrapper">
 
-            <span style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: var(--accent);"><i class="fas fa-exclamation-triangle"></i> KRİTİK RULO ALARMLARI:</span>
+            <span style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: var(--accent);"><i class="fas fa-exclamation-triangle"></i> KRÄ°TÄ°K RULO ALARMLARI:</span>
 
             @foreach (var kumas in Model.KritikKumaslar)
 
@@ -685,7 +686,7 @@
 
                     </div>
 
-                    <span class="badge" style="background: var(--accent); color: var(--primary); font-weight: 700; margin-left: 8px;">@kumas.StokMiktar Mt Kaldı!</span>
+                    <span class="badge" style="background: var(--accent); color: var(--primary); font-weight: 700; margin-left: 8px;">@kumas.StokMiktar Mt KaldÄ±!</span>
 
                 </div>
 
@@ -693,7 +694,7 @@
 
         </div>
 
-        <button id="factoryOrderBtn" type="button" onclick="stokSiparisiOlustur()" class="btn btn-sm" style="background: var(--accent); color: var(--primary); font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none;"><i class="fas fa-shopping-cart me-1"></i> FABRİKADAN SİPARİŞ ET</button>
+        <button id="factoryOrderBtn" type="button" onclick="stokSiparisiOlustur()" class="btn btn-sm" style="background: var(--accent); color: var(--primary); font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none;"><i class="fas fa-shopping-cart me-1"></i> FABRÄ°KADAN SÄ°PARÄ°Å ET</button>
 
     </div>
 
@@ -703,7 +704,7 @@
 
     <script>
 
-            // Modal fonksiyonu - Durumu güncelle
+            // Modal fonksiyonu - Durumu gÃ¼ncelle
 
             function stokSiparisiOlustur() {
 
@@ -717,9 +718,9 @@
 
 
 
-                document.getElementById('modalTitle').textContent = 'Kritik stoklar için fabrika siparişi oluşturulsun mu?';
+                document.getElementById('modalTitle').textContent = 'Kritik stoklar iÃ§in fabrika sipariÅŸi oluÅŸturulsun mu?';
 
-                document.getElementById('modalMessage').textContent = 'Listelenen kritik kumaş ruloları için satın alma talebi hazırlanacak.';
+                document.getElementById('modalMessage').textContent = 'Listelenen kritik kumaÅŸ rulolarÄ± iÃ§in satÄ±n alma talebi hazÄ±rlanacak.';
 
 
 
@@ -731,13 +732,13 @@
 
                     btn.disabled = true;
 
-                    btn.innerHTML = '<i class="fas fa-check me-1"></i> SİPARİŞ OLUŞTURULDU';
+                    btn.innerHTML = '<i class="fas fa-check me-1"></i> SÄ°PARÄ°Å OLUÅTURULDU';
 
                     btn.style.opacity = '0.85';
 
                     modal.hide();
 
-                    showSuccessMessage('Fabrika siparişi oluşturuldu. Talep no: ' + siparisNo);
+                    showSuccessMessage('Fabrika sipariÅŸi oluÅŸturuldu. Talep no: ' + siparisNo);
 
                 };
 
@@ -751,7 +752,7 @@
 
             function updateStatus(id, newStatus, type) {
 
-                // Modal göster
+                // Modal gÃ¶ster
 
                 const modal = new bootstrap.Modal(document.getElementById('confirmModal'), {
 
@@ -763,13 +764,13 @@
 
 
 
-                document.getElementById('modalTitle').textContent = newStatus + ' durumuna çevir?';
+                document.getElementById('modalTitle').textContent = newStatus + ' durumuna Ã§evir?';
 
-                document.getElementById('modalMessage').textContent = 'Bu işlemi onaylıyor musunuz?';
+                document.getElementById('modalMessage').textContent = 'Bu iÅŸlemi onaylÄ±yor musunuz?';
 
 
 
-                // Onay butonuna tıklandığında
+                // Onay butonuna tÄ±klandÄ±ÄŸÄ±nda
 
                 document.getElementById('confirmBtn').onclick = function() {
 
@@ -787,7 +788,7 @@
 
 
 
-            // AJAX ile durumu güncelle
+            // AJAX ile durumu gÃ¼ncelle
 
             function updateStatusAjax(id, newStatus, type) {
 
@@ -805,7 +806,7 @@
 
                         if (!response.ok) {
 
-                            throw new Error('Durum güncellenemedi.');
+                            throw new Error('Durum gÃ¼ncellenemedi.');
 
                         }
 
@@ -815,11 +816,11 @@
 
                     .then(() => {
 
-                        // Başarı mesajı göster
+                        // BaÅŸarÄ± mesajÄ± gÃ¶ster
 
                         showSuccessModal(newStatus);
 
-                        // 2 saniye sonra sayfayı yenile
+                        // 2 saniye sonra sayfayÄ± yenile
 
                         setTimeout(() => location.reload(), 2000);
 
@@ -837,13 +838,13 @@
 
 
 
-            // Başarı mesajı modal
+            // BaÅŸarÄ± mesajÄ± modal
 
             function showSuccessModal(newStatus) {
 
                 const modal = new bootstrap.Modal(document.getElementById('successModal'));
 
-                document.getElementById('successMessage').textContent = '✅ ' + newStatus + ' durumuna başarıyla güncellendi!';
+                document.getElementById('successMessage').textContent = 'âœ… ' + newStatus + ' durumuna baÅŸarÄ±yla gÃ¼ncellendi!';
 
                 modal.show();
 
@@ -851,13 +852,13 @@
 
 
 
-            // Hata mesajı modal
+            // Hata mesajÄ± modal
 
             function showSuccessMessage(message) {
 
                 const modal = new bootstrap.Modal(document.getElementById('successModal'));
 
-                document.getElementById('successMessage').textContent = '✅ ' + message;
+                document.getElementById('successMessage').textContent = 'âœ… ' + message;
 
                 modal.show();
 
@@ -895,13 +896,13 @@
 
                 <div class="modal-body" style="padding: 25px;">
 
-                    <p id="modalMessage" style="font-size: 1.05rem; color: var(--text-dark);">Bu işlemi onaylıyor musunuz?</p>
+                    <p id="modalMessage" style="font-size: 1.05rem; color: var(--text-dark);">Bu iÅŸlemi onaylÄ±yor musunuz?</p>
 
                 </div>
 
                 <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
 
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 10px;">İptal</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 10px;">Ä°ptal</button>
 
                     <button type="button" id="confirmBtn" class="btn text-white" style="background-color: var(--primary); border-radius: 10px; font-weight: 600;">Evet, Onayla</button>
 
@@ -915,7 +916,7 @@
 
 
 
-    <!-- Başarı Modal -->
+    <!-- BaÅŸarÄ± Modal -->
 
     <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
 
@@ -925,7 +926,7 @@
 
                 <div class="modal-header" style="background-color: #28a745; color: white; border: none;">
 
-                    <h5 class="modal-title fw-bold">Başarılı</h5>
+                    <h5 class="modal-title fw-bold">BaÅŸarÄ±lÄ±</h5>
 
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
 
@@ -933,7 +934,7 @@
 
                 <div class="modal-body" style="padding: 25px;">
 
-                    <p id="successMessage" style="font-size: 1.05rem; color: var(--text-dark);">✅ İşlem başarıyla tamamlandı!</p>
+                    <p id="successMessage" style="font-size: 1.05rem; color: var(--text-dark);">âœ… Ä°ÅŸlem baÅŸarÄ±yla tamamlandÄ±!</p>
 
                 </div>
 
@@ -969,7 +970,7 @@
 
                 <div class="modal-body" style="padding: 25px;">
 
-                    <p style="font-size: 1.05rem; color: var(--text-dark);">❌ İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.</p>
+                    <p style="font-size: 1.05rem; color: var(--text-dark);">âŒ Ä°ÅŸlem sÄ±rasÄ±nda bir hata oluÅŸtu. LÃ¼tfen tekrar deneyin.</p>
 
                 </div>
 
