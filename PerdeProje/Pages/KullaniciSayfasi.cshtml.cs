@@ -108,11 +108,18 @@ namespace PerdeProje.Pages
                         return Page();
                     }
 
+                    if (PasswordHasher.VerifyPassword(Sifre, kullanici.Sifre) || kullanici.Sifre == Sifre)
+                    {
+                        BilgiMesaji = "Yeni şifre mevcut şifrenizle aynı olamaz.";
+                        KullaniciVerileriniYukle(userId);
+                        return Page();
+                    }
+
                     kullanici.Sifre = PasswordHasher.HashPassword(Sifre);
                 }
 
                 _context.SaveChanges();
-                BilgiMesaji = "🔒 Bilgileriniz başarıyla güncellendi!";
+                BilgiMesaji = "Bilgileriniz başarıyla güncellendi.";
             }
 
             try

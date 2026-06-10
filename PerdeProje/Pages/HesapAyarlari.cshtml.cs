@@ -89,7 +89,14 @@ namespace PerdeProje.Pages
                 {
                     if (YeniSifre.Length < 6)
                     {
-                        BilgiMesaji = "Sifre en az 6 karakter olmalidir.";
+                        BilgiMesaji = "Şifre en az 6 karakter olmalıdır.";
+                        KullaniciVerileriniYukle(userId);
+                        return Page();
+                    }
+
+                    if (PasswordHasher.VerifyPassword(YeniSifre, kullanici.Sifre) || kullanici.Sifre == YeniSifre)
+                    {
+                        BilgiMesaji = "Yeni şifre mevcut şifrenizle aynı olamaz.";
                         KullaniciVerileriniYukle(userId);
                         return Page();
                     }

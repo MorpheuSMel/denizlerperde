@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Kayıt Ol";
 }
+<link rel="icon" type="image/png" href="~/favicon.png?v=4" />
 <link rel="stylesheet" href="~/css/login.css" />
 
 <section class="login-section">
@@ -58,11 +59,12 @@
                     <div class="form-group">
                         <label class="form-label" for="Sifre">Şifre *</label>
                         <input type="password" id="Sifre" name="Sifre" class="form-control" placeholder="En az 6 karakter" minlength="6" autocomplete="off" />
-                        <small style="color: var(--text-muted); display: block; margin-top: 0.3rem; font-size: 0.8rem;">En az 6 karakter yeterlidir.</small>
+                        <small id="SifreGucu" style="color: var(--text-muted); display: block; margin-top: 0.3rem; font-size: 0.8rem;">En az 6 karakter yeterlidir.</small>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="SifreKontrol">Şifre Tekrar *</label>
                         <input type="password" id="SifreKontrol" name="SifreKontrol" class="form-control" placeholder="Şifreyi tekrar girin" minlength="6" autocomplete="off" />
+                        <small id="SifreEslesme" style="color: var(--text-muted); display: block; margin-top: 0.3rem; font-size: 0.8rem;"></small>
                     </div>
                 </div>
 
@@ -104,5 +106,65 @@
 
         input.addEventListener('input', formatPhone);
         formatPhone();
+    });
+
+    const sifreInput = document.getElementById('Sifre');
+    const sifreKontrolInput = document.getElementById('SifreKontrol');
+    const sifreGucu = document.getElementById('SifreGucu');
+    const sifreEslesme = document.getElementById('SifreEslesme');
+    const form = document.querySelector('form');
+
+    function scorePassword(value) {
+        let score = 0;
+        if (value.length >= 6) score++;
+        if (value.length >= 10) score++;
+        if (/[A-ZÇĞİÖŞÜ]/.test(value) && /[a-zçğıöşü]/.test(value)) score++;
+        if (/\d/.test(value)) score++;
+        if (/[^A-Za-zÇĞİÖŞÜçğıöşü0-9]/.test(value)) score++;
+        if (/^(.)\1+$/.test(value) || /^(123456|1234567|12345678|111111|000000)$/i.test(value)) score = Math.min(score, 1);
+        return score;
+    }
+
+    function updatePasswordHelp() {
+        const value = sifreInput.value;
+        const score = scorePassword(value);
+
+        if (!value) {
+            sifreGucu.textContent = 'En az 6 karakter yeterlidir.';
+            sifreGucu.style.color = 'var(--text-muted)';
+        } else if (score <= 1) {
+            sifreGucu.textContent = 'Kolay şifre';
+            sifreGucu.style.color = '#c2574f';
+        } else if (score <= 3) {
+            sifreGucu.textContent = 'Orta şifre';
+            sifreGucu.style.color = '#b37a22';
+        } else {
+            sifreGucu.textContent = 'Güçlü şifre';
+            sifreGucu.style.color = '#2f7d4f';
+        }
+
+        if (!sifreKontrolInput.value) {
+            sifreEslesme.textContent = '';
+            return;
+        }
+
+        if (sifreInput.value === sifreKontrolInput.value) {
+            sifreEslesme.textContent = 'Şifreler eşleşiyor.';
+            sifreEslesme.style.color = '#2f7d4f';
+        } else {
+            sifreEslesme.textContent = 'Şifreler eşleşmiyor.';
+            sifreEslesme.style.color = '#c2574f';
+        }
+    }
+
+    sifreInput.addEventListener('input', updatePasswordHelp);
+    sifreKontrolInput.addEventListener('input', updatePasswordHelp);
+
+    form.addEventListener('submit', function (event) {
+        if (sifreInput.value !== sifreKontrolInput.value) {
+            event.preventDefault();
+            sifreEslesme.textContent = 'Şifreler eşleşmiyor.';
+            sifreEslesme.style.color = '#c2574f';
+        }
     });
 </script>

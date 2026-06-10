@@ -63,7 +63,7 @@ namespace PerdeProje.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostSil(int id)
+        public IActionResult OnPostSil(int satir)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Session.GetString("UserId")))
             {
@@ -84,11 +84,9 @@ namespace PerdeProje.Pages
                 .Where(urunId => urunId > 0)
                 .ToList();
 
-            var silinecekIndex = ids.IndexOf(id);
-
-            if (silinecekIndex >= 0)
+            if (satir >= 0 && satir < ids.Count)
             {
-                ids.RemoveAt(silinecekIndex);
+                ids.RemoveAt(satir);
                 Mesaj = "Ürün sepetten silindi.";
             }
 

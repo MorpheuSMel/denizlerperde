@@ -20,8 +20,9 @@
     {
         <div class="card border-0 shadow-sm" style="border-radius:16px;">
             <div class="card-body">
-                @foreach (var urun in Model.Urunler)
+                @for (var i = 0; i < Model.Urunler.Count; i++)
                 {
+                    var urun = Model.Urunler[i];
                     <div class="d-flex gap-3 align-items-center py-3 border-bottom">
                         <img src="@urun.ResimUrl" alt="@urun.Ad" style="width:96px;height:72px;object-fit:cover;border-radius:10px;">
                         <div class="flex-grow-1">
@@ -29,7 +30,7 @@
                             <div class="text-muted small">@urun.Kategori</div>
                         </div>
                         <strong style="color:#6b5344;">₺@urun.Fiyat.ToString("N2")</strong>
-                        <form method="post" asp-page-handler="Sil" asp-route-id="@urun.Id" class="m-0">
+                        <form method="post" action="/Sepet?handler=Sil&satir=@i" class="m-0">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm btn-outline-danger" style="border-radius:10px;">Sil</button>
                         </form>
