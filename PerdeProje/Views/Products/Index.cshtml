@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Http
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Urunler";
+    ViewData["Title"] = "Ürünler";
     var girisYapildi = !string.IsNullOrWhiteSpace(Context.Session.GetString("UserId"));
 }
 
@@ -27,14 +27,18 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 border-0 shadow-sm p-3 card-hover-effect" style="border-radius: 20px; background-color: #ffffff;">
                         <div class="position-relative">
-                            <img src="@(string.IsNullOrWhiteSpace(urun.ResimUrl) ? "https://via.placeholder.com/600x400?text=Denizler+Perde" : urun.ResimUrl)" alt="@urun.Ad" class="img-fluid rounded-4 w-100" style="height: 220px; object-fit: cover;" />
+                            <a href="/Products/Details/@urun.Id" title="@urun.Ad detayları">
+                                <img src="@(string.IsNullOrWhiteSpace(urun.ResimUrl) ? "https://via.placeholder.com/600x400?text=Denizler+Perde" : urun.ResimUrl)" alt="@urun.Ad" class="img-fluid rounded-4 w-100" style="height: 220px; object-fit: cover;" />
+                            </a>
                             @if (!string.IsNullOrWhiteSpace(urun.IkinciResimUrl))
                             {
                                 <img src="@urun.IkinciResimUrl" class="second-product-image" alt="@urun.Ad ikinci görsel">
                             }
                             <span class="position-absolute top-0 start-0 m-2 px-3 py-1 rounded-pill text-white small" style="background-color: rgba(107, 83, 68, 0.9);">@urun.Kategori</span>
                         </div>
-                        <h5 class="mt-3 fw-bold text-dark">@urun.Ad</h5>
+                        <h5 class="mt-3 fw-bold text-dark">
+                            <a href="/Products/Details/@urun.Id" class="text-dark text-decoration-none">@urun.Ad</a>
+                        </h5>
                         <p class="text-muted small flex-grow-1">@urun.Aciklama</p>
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-bold" style="color: #6b5344;">₺@urun.Fiyat.ToString("N2")</span>
@@ -66,6 +70,7 @@
                                 </a>
                             }
                         </div>
+                        <a class="btn w-100 btn-light fw-semibold mt-2" style="color: #6b5344; border-radius: 12px;" href="/Products/Details/@urun.Id">Detayları Gör</a>
                         <a class="btn w-100 btn-light fw-semibold mt-2" style="color: #6b5344; border-radius: 12px;" href="/Iletisim?model=@Uri.EscapeDataString(urun.Ad)">Randevu Al</a>
                     </div>
                 </div>

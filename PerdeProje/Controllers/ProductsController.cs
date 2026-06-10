@@ -27,6 +27,21 @@ namespace PerdeProje.Controllers
             return View(urunler);
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            await EnsureCatalogAsync();
+
+            var urun = await _context.Urunler.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (urun == null)
+            {
+                TempData["Mesaj"] = "Ürün bulunamadı.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(urun);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SepeteEkle(int id)
@@ -91,8 +106,15 @@ namespace PerdeProje.Controllers
                     UrunId = id,
                     UrunAdi = urun.Ad
                 });
-                await _context.SaveChangesAsync();
-                TempData["Mesaj"] = "Ürün favorilere eklendi.";
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    TempData["Mesaj"] = "Ürün favorilere eklendi.";
+                }
+                catch
+                {
+                    TempData["Mesaj"] = "Favorilere eklenirken bir sorun oluştu. Lütfen tekrar deneyin.";
+                }
             }
             else
             {
@@ -149,6 +171,16 @@ namespace PerdeProje.Controllers
                 .ToList();
             if (silinecekUrunler.Count > 0)
             {
+                var silinecekIds = silinecekUrunler.Select(urun => urun.Id).ToList();
+                var eskiFavoriler = await _context.Favoriler
+                    .Where(favori => silinecekIds.Contains(favori.UrunId))
+                    .ToListAsync();
+
+                if (eskiFavoriler.Count > 0)
+                {
+                    _context.Favoriler.RemoveRange(eskiFavoriler);
+                }
+
                 _context.Urunler.RemoveRange(silinecekUrunler);
                 mevcutUrunler = mevcutUrunler.Except(silinecekUrunler).ToList();
             }

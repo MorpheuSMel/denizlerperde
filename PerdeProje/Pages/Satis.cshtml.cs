@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -127,7 +127,15 @@ namespace PerdeProje.Pages
                     UrunId = id,
                     UrunAdi = urun.Ad
                 });
-                await _context.SaveChangesAsync();
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch
+                {
+                    Mesaj = "Favorilere eklenirken bir sorun oluştu. Lütfen tekrar deneyin.";
+                    return RedirectToPage(new { Kategori, Siralama });
+                }
             }
 
             Mesaj = zatenVar ? "Bu ürün zaten favorilerinizde." : "Ürün favorilere eklendi.";
@@ -165,7 +173,7 @@ namespace PerdeProje.Pages
                 "Gipurlu Tul Perde",
                 "Duz Ekru Tul Perde",
                 "Gipürlü Örme Tül Perde",
-                "Güneslik Stor Perde",
+                "Güneşlik Stor Perde",
                 "Güneşlik Stor Perde",
                 "Keten Fon Perde",
                 "Kadife Fon Perde"
@@ -176,6 +184,16 @@ namespace PerdeProje.Pages
                 .ToList();
             if (silinecekUrunler.Count > 0)
             {
+                var silinecekIds = silinecekUrunler.Select(urun => urun.Id).ToList();
+                var eskiFavoriler = await _context.Favoriler
+                    .Where(favori => silinecekIds.Contains(favori.UrunId))
+                    .ToListAsync();
+
+                if (eskiFavoriler.Count > 0)
+                {
+                    _context.Favoriler.RemoveRange(eskiFavoriler);
+                }
+
                 _context.Urunler.RemoveRange(silinecekUrunler);
                 mevcutUrunler = mevcutUrunler.Except(silinecekUrunler).ToList();
             }

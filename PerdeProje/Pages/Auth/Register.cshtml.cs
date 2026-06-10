@@ -16,77 +16,75 @@ namespace PerdeProje.Pages.Auth
         }
 
         [BindProperty]
-        public string Ad { get; set; }
+        public string Ad { get; set; } = "";
 
         [BindProperty]
-        public string Soyad { get; set; }
+        public string Soyad { get; set; } = "";
 
         [BindProperty]
-        public string Email { get; set; }
+        public string Email { get; set; } = "";
 
         [BindProperty]
-        public string Telefon { get; set; }
+        public string Telefon { get; set; } = "";
 
         [BindProperty]
-        public string Sifre { get; set; }
+        public string Sifre { get; set; } = "";
 
         [BindProperty]
-        public string SifreKontrol { get; set; }
+        public string SifreKontrol { get; set; } = "";
 
-        public string ErrorMessage { get; set; }
-        public string SuccessMessage { get; set; }
+        public string ErrorMessage { get; set; } = "";
+        public string SuccessMessage { get; set; } = "";
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            // Eğer kullanıcı zaten giriş yapmışsa, ana sayfaya yönlendir
             if (HttpContext.Session.GetString("UserId") != null)
             {
-                RedirectToPage("/Index");
+                return RedirectToPage("/Index");
             }
+
+            return Page();
         }
 
         public IActionResult OnPost()
         {
-            // Boş alan kontrol
-            if (string.IsNullOrWhiteSpace(Ad) || string.IsNullOrWhiteSpace(Soyad) || 
-                string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Sifre) ||
+            if (string.IsNullOrWhiteSpace(Ad) ||
+                string.IsNullOrWhiteSpace(Soyad) ||
+                string.IsNullOrWhiteSpace(Email) ||
+                string.IsNullOrWhiteSpace(Sifre) ||
                 string.IsNullOrWhiteSpace(SifreKontrol))
             {
-                ErrorMessage = "Lütfen tüm zorunlu alanları (* ile işaretlenenler) doldurunuz.";
+                ErrorMessage = "Lütfen tüm zorunlu alanları doldurun.";
                 return Page();
             }
 
-            // Şifre ve şifre tekrar kontrol
             if (Sifre != SifreKontrol)
             {
-                ErrorMessage = "❌ Şifreler eşleşmiyor! Lütfen aynı şifreyi girdiğinizden emin olun.";
+                ErrorMessage = "Şifreler eşleşmiyor. Lütfen aynı şifreyi girin.";
                 return Page();
             }
 
-            // Şifre uzunluğu kontrol
             if (Sifre.Length < 6)
             {
-                ErrorMessage = "❌ Şifre en az 6 karakter olmalıdır. Daha uzun bir şifre girin.";
+                ErrorMessage = "Şifre en az 6 karakter olmalıdır.";
                 return Page();
             }
 
             var temizTelefon = TelefonRakamlari(Telefon);
             if (!string.IsNullOrWhiteSpace(Telefon) && (temizTelefon.Length != 11 || !temizTelefon.StartsWith("0")))
             {
-                ErrorMessage = "Telefon numarasi 0 ile baslayan 11 haneli olmalidir.";
+                ErrorMessage = "Telefon numarası 0 ile başlayan 11 haneli olmalıdır.";
                 return Page();
             }
 
             try
             {
-                // E-posta zaten kayıtlı mı kontrol et
-                if (_context.Users.Any(u => u.Email == Email))
+                if (_context.Users.Any(u => u.Email == Email.Trim()))
                 {
-                    ErrorMessage = "❌ Bu e-posta adresi zaten kayıtlı. Başka bir e-posta kullanın.";
+                    ErrorMessage = "Bu e-posta adresi zaten kayıtlı. Başka bir e-posta kullanın.";
                     return Page();
                 }
 
-                // Yeni kullanıcı oluştur
                 var user = new User
                 {
                     Ad = Ad.Trim(),
@@ -94,7 +92,7 @@ namespace PerdeProje.Pages.Auth
                     Email = Email.Trim(),
                     Telefon = TelefonuFormatla(temizTelefon),
                     Sifre = PasswordHasher.HashPassword(Sifre),
-                    Rol = "User", // Varsayılan rol User
+                    Rol = "User",
                     OlusturmaTarihi = DateTime.Now,
                     AktifMi = true
                 };
@@ -102,13 +100,12 @@ namespace PerdeProje.Pages.Auth
                 _context.Users.Add(user);
                 _context.SaveChanges();
 
-                // Başarılı kayıt, login sayfasına yönlendir
-                SuccessMessage = "✅ Kayıt başarılı! Lütfen giriş yapınız.";
+                SuccessMessage = "Kayıt başarılı. Lütfen giriş yapın.";
                 return RedirectToPage("Login");
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"❌ Kayıt sırasında hata oluştu: {ex.InnerException?.Message ?? ex.Message}";
+                ErrorMessage = $"Kayıt sırasında hata oluştu: {ex.InnerException?.Message ?? ex.Message}";
                 return Page();
             }
         }
