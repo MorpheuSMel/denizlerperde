@@ -63,6 +63,47 @@ namespace PerdeProje.Pages
             return RedirectToPage();
         }
 
+        public IActionResult OnPostSil(int id)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Session.GetString("UserId")))
+            {
+                return RedirectToPage("/Auth/Login");
+            }
+
+            var sepetIds = HttpContext.Session.GetString("SepetUrunIds");
+
+            if (string.IsNullOrWhiteSpace(sepetIds))
+            {
+                Mesaj = "Sepetiniz zaten boş.";
+                return RedirectToPage();
+            }
+
+            var ids = sepetIds
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(deger => int.TryParse(deger, out var urunId) ? urunId : 0)
+                .Where(urunId => urunId > 0)
+                .ToList();
+
+            var silinecekIndex = ids.IndexOf(id);
+
+            if (silinecekIndex >= 0)
+            {
+                ids.RemoveAt(silinecekIndex);
+                Mesaj = "Ürün sepetten silindi.";
+            }
+
+            if (ids.Count == 0)
+            {
+                HttpContext.Session.Remove("SepetUrunIds");
+            }
+            else
+            {
+                HttpContext.Session.SetString("SepetUrunIds", string.Join(",", ids));
+            }
+
+            return RedirectToPage();
+        }
+
         public async Task<IActionResult> OnPostSiparisOlusturAsync()
         {
             var userIdStr = HttpContext.Session.GetString("UserId");
