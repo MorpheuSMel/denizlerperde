@@ -117,8 +117,15 @@ namespace PerdeProje.Pages
             }
 
             var rol = await AktifRolAsync();
-            hedef = SonrakiHedef(rol, durum, hedef);
-            siparis.Durum = DurumKayitDegeri(durum, hedef);
+            if (rol.Equals("Paketlemeci", StringComparison.OrdinalIgnoreCase))
+            {
+                siparis.Durum = DurumKayitDegeri("Kargoya Teslim", "Kargo");
+            }
+            else
+            {
+                hedef = SonrakiHedef(rol, durum, hedef);
+                siparis.Durum = DurumKayitDegeri(durum, hedef);
+            }
             await _context.SaveChangesAsync();
             return RedirectToPage();
         }
