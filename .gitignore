@@ -10,3 +10,4 @@ obj/
 *.db 
 **/Yayin/
 **/Kurulum/
+**/publish-check/

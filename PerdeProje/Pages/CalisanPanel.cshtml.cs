@@ -29,10 +29,25 @@ namespace PerdeProje.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             Rol = HttpContext.Session.GetString("UserRole") ?? "";
+            var sessionUserId = HttpContext.Session.GetString("UserId");
 
-            if (string.IsNullOrWhiteSpace(HttpContext.Session.GetString("UserId")))
+            if (string.IsNullOrWhiteSpace(sessionUserId))
             {
                 return RedirectToPage("/Auth/Login");
+            }
+
+            if (int.TryParse(sessionUserId, out var userId))
+            {
+                var kullaniciRolu = await _context.Users
+                    .Where(user => user.Id == userId)
+                    .Select(user => user.Rol)
+                    .FirstOrDefaultAsync();
+
+                if (!string.IsNullOrWhiteSpace(kullaniciRolu) && !Rol.Equals(kullaniciRolu, StringComparison.OrdinalIgnoreCase))
+                {
+                    Rol = kullaniciRolu;
+                    HttpContext.Session.SetString("UserRole", Rol);
+                }
             }
 
             if (Rol.Equals("Admin", StringComparison.OrdinalIgnoreCase))

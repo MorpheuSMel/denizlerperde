@@ -71,9 +71,9 @@ namespace PerdeProje.Pages.Auth
             }
 
             var temizTelefon = TelefonRakamlari(Telefon);
-            if (!string.IsNullOrWhiteSpace(Telefon) && (temizTelefon.Length != 11 || !temizTelefon.StartsWith("0")))
+            if (!string.IsNullOrWhiteSpace(Telefon) && !GecerliTelefonMu(temizTelefon))
             {
-                ErrorMessage = "Telefon numarası 0 ile başlayan 11 haneli olmalıdır.";
+                ErrorMessage = "Telefon numarası 05xx xxx xx xx formatında olmalıdır.";
                 return Page();
             }
 
@@ -112,7 +112,34 @@ namespace PerdeProje.Pages.Auth
 
         private static string TelefonRakamlari(string? telefon)
         {
-            return new string((telefon ?? string.Empty).Where(char.IsDigit).Take(11).ToArray());
+            var rakamlar = new string((telefon ?? string.Empty).Where(char.IsDigit).ToArray());
+            if (rakamlar.Length == 10 && !rakamlar.StartsWith("0"))
+            {
+                rakamlar = "0" + rakamlar;
+            }
+
+            return rakamlar.Length > 11 ? rakamlar[..11] : rakamlar;
+        }
+
+        private static bool GecerliTelefonMu(string telefon)
+        {
+            if (string.IsNullOrWhiteSpace(telefon))
+            {
+                return true;
+            }
+
+            if (telefon.Length != 11 || !telefon.StartsWith("05"))
+            {
+                return false;
+            }
+
+            if (telefon.Distinct().Count() <= 2)
+            {
+                return false;
+            }
+
+            var kolayNumaralar = new[] { "05123456789", "05000000000", "05555555555", "05333333333" };
+            return !kolayNumaralar.Contains(telefon);
         }
 
         private static string TelefonuFormatla(string? telefon)
