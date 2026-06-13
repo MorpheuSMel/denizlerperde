@@ -24,6 +24,7 @@ namespace PerdeProje.Pages
         public bool MontajciMi => Rol.Equals("Montajci", StringComparison.OrdinalIgnoreCase);
         public List<Siparis> Siparisler { get; set; } = new();
         public List<Randevu> Randevular { get; set; } = new();
+        public static string GorunenDurum(string? durum) => DurumMetni(durum);
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -87,7 +88,7 @@ namespace PerdeProje.Pages
             return RedirectToPage("/KullaniciSayfasi");
         }
 
-        public async Task<IActionResult> OnPostSiparisDurumAsync(int id, string durum)
+        public async Task<IActionResult> OnPostSiparisDurumAsync(int id, string durum, string hedef = "")
         {
             if (id <= 0 || string.IsNullOrWhiteSpace(durum))
             {
@@ -100,7 +101,7 @@ namespace PerdeProje.Pages
                 return RedirectToPage();
             }
 
-            siparis.Durum = DurumDegeri(durum);
+            siparis.Durum = DurumKayitDegeri(durum, hedef);
             await _context.SaveChangesAsync();
             return RedirectToPage();
         }
@@ -126,7 +127,8 @@ namespace PerdeProje.Pages
 
             return siparisler
                 .Where(siparis => anahtarlar.Any(anahtar => MetinIcerir(siparis.UrunAdi, anahtar)))
-                .Where(siparis => !PaketlemeyeGidecekMi(siparis)
+                .Where(siparis => (HedefIcerir(siparis, "Terzi") || string.IsNullOrWhiteSpace(HedefDegeri(siparis.Durum)) || DurumIcerir(siparis, "Terziye") || DurumIcerir(siparis, "Dikim") || DurumIcerir(siparis, "Dikime"))
+                    && !PaketlemeyeGidecekMi(siparis)
                     && !KargoyaGidecekMi(siparis)
                     && !MontajaGidecekMi(siparis)
                     && !DurumIcerir(siparis, "Teslim Edildi"))
@@ -223,30 +225,93 @@ namespace PerdeProje.Pages
             return temizDurum;
         }
 
+        public static string DurumKayitDegeri(string durum, string hedef = "")
+        {
+            var temizDurum = DurumDegeri(durum);
+            var temizHedef = HedefDegeri(hedef);
+
+            if (string.IsNullOrWhiteSpace(temizHedef))
+            {
+                temizHedef = temizDurum switch
+                {
+                    "Terziye Gönderiliyor" or "Dikime Alındı" or "Dikim Tamamlandı" => "Terzi",
+                    "Paketlemeye Hazır" => "Paketleme",
+                    "Paketlendi" or "Kargoya Teslim" => "Kargo",
+                    "Montaja Hazır" or "Teslimat Başladı" => "Montaj",
+                    _ => ""
+                };
+            }
+
+            return string.IsNullOrWhiteSpace(temizHedef)
+                ? temizDurum
+                : $"{temizDurum}||{temizHedef}";
+        }
+
+        private static string DurumMetni(string? durum)
+        {
+            var parcalar = (durum ?? "").Split("||", StringSplitOptions.None);
+            return DurumDegeri(parcalar[0]);
+        }
+
+        private static string HedefDegeri(string? durum)
+        {
+            var parcalar = (durum ?? "").Split("||", StringSplitOptions.None);
+            var hedef = parcalar.Length > 1 ? parcalar[1].Trim() : (durum ?? "").Trim();
+
+            if (MetinIcerir(hedef, "Terzi"))
+            {
+                return "Terzi";
+            }
+
+            if (MetinIcerir(hedef, "Paket"))
+            {
+                return "Paketleme";
+            }
+
+            if (MetinIcerir(hedef, "Kargo"))
+            {
+                return "Kargo";
+            }
+
+            if (MetinIcerir(hedef, "Montaj"))
+            {
+                return "Montaj";
+            }
+
+            return "";
+        }
+
         private static bool PaketlemeyeGidecekMi(Siparis siparis)
         {
-            return DurumIcerir(siparis, "Paketleme")
+            return (HedefIcerir(siparis, "Paketleme") || DurumIcerir(siparis, "Paketleme"))
                 && !DurumIcerir(siparis, "Paketlendi")
                 && !DurumIcerir(siparis, "Kargoya");
         }
 
         private static bool KargoyaGidecekMi(Siparis siparis)
         {
-            return (DurumIcerir(siparis, "Paketlendi")
+            return (HedefIcerir(siparis, "Kargo")
+                    || DurumIcerir(siparis, "Paketlendi")
                     || DurumIcerir(siparis, "Kargoya Teslim"))
                 && !DurumIcerir(siparis, "Kargoya Verildi");
         }
 
         private static bool MontajaGidecekMi(Siparis siparis)
         {
-            return (DurumIcerir(siparis, "Montaja")
+            return (HedefIcerir(siparis, "Montaj")
+                    || DurumIcerir(siparis, "Montaja")
                     || DurumIcerir(siparis, "Teslimat Başladı"))
                 && !DurumIcerir(siparis, "Teslim Edildi");
         }
 
         private static bool DurumIcerir(Siparis siparis, string durum)
         {
-            return MetinIcerir(siparis.Durum ?? "", durum);
+            return MetinIcerir(DurumMetni(siparis.Durum), durum);
+        }
+
+        private static bool HedefIcerir(Siparis siparis, string hedef)
+        {
+            return HedefDegeri(siparis.Durum) == HedefDegeri(hedef);
         }
 
         private static bool MetinIcerir(string kaynak, string aranan)

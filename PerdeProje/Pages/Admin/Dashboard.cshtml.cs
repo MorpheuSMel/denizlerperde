@@ -58,7 +58,7 @@ namespace PerdeProje.Pages.Admin
                 return NotFound();
             }
 
-            siparis.Durum = DurumMetni(newStatus);
+            siparis.Durum = PerdeProje.Pages.CalisanPanelModel.DurumKayitDegeri(newStatus);
             await _context.SaveChangesAsync();
 
             return new JsonResult(new { success = true, status = DurumMetni(siparis.Durum) });

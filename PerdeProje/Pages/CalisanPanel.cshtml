@@ -169,7 +169,7 @@
                 @foreach (var siparis in Model.Siparisler)
                 {
                     <article class="task-card">
-                        <span class="status-pill">@siparis.Durum</span>
+                        <span class="status-pill">@PerdeProje.Pages.CalisanPanelModel.GorunenDurum(siparis.Durum)</span>
                         <h3>@siparis.UrunAdi</h3>
                         <div class="task-meta">
                             <span><strong>Sipariş Kodu:</strong> @siparis.SiparisKodu</span>
@@ -197,7 +197,7 @@
                 @foreach (var siparis in Model.Siparisler)
                 {
                     <article class="task-card">
-                        <span class="status-pill">@siparis.Durum</span>
+                        <span class="status-pill">@PerdeProje.Pages.CalisanPanelModel.GorunenDurum(siparis.Durum)</span>
                         <h3>@siparis.UrunAdi</h3>
                         <div class="task-meta">
                             <span><strong>Sipariş Kodu:</strong> @siparis.SiparisKodu</span>
@@ -208,10 +208,12 @@
                             @if (Model.AkilliSistemciMi)
                             {
                                 <button type="submit" name="durum" value="Paketlemeye Hazır">Paketlemeye Yolla</button>
+                                <button type="submit" name="hedef" value="Paketleme" hidden></button>
                             }
                             else if (Model.PaketlemeciMi)
                             {
                                 <button type="submit" name="durum" value="Paketlendi">Paketlendi</button>
+                                <button type="submit" name="hedef" value="Kargo" hidden></button>
                             }
                             else if (Model.KargocuMu)
                             {
