@@ -159,6 +159,58 @@ namespace PerdeProje.Pages.Admin
 
         public static string DurumMetni(string? durum)
         {
+            var temizDurum = (durum ?? string.Empty).Trim();
+
+            if (temizDurum.Contains("Terziye", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Terziye Gönderiliyor";
+            }
+
+            if (temizDurum.Contains("Dikime", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Dikime Alındı";
+            }
+
+            if (temizDurum.Contains("Dikim", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Dikim Tamamlandı";
+            }
+
+            if (temizDurum.Contains("Paketlemeye", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Paketlemeye Hazır";
+            }
+
+            if (temizDurum.Contains("Paketlendi", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Paketlendi";
+            }
+
+            if (temizDurum.Contains("Kargoya Teslim", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Kargoya Teslim";
+            }
+
+            if (temizDurum.Contains("Kargoya Verildi", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Kargoya Verildi";
+            }
+
+            if (temizDurum.Contains("Montaja", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Montaja Hazır";
+            }
+
+            if (temizDurum.Contains("Teslimat Başladı", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Teslimat Başladı";
+            }
+
+            if (temizDurum.Contains("Teslim Edildi", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return "Teslim Edildi";
+            }
+
             return (durum ?? string.Empty).Trim() switch
             {
                 "Siparis alindi" or "Siparis Alindi" or "Sipariş alındı" or "Sipariş alindi" or "SipariÅŸ alÄ±ndÄ±" or "SipariÅŸ AlÄ±ndÄ±" => "Sipariş Alındı",

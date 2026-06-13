@@ -100,7 +100,7 @@ namespace PerdeProje.Pages
                 return RedirectToPage();
             }
 
-            siparis.Durum = durum.Trim();
+            siparis.Durum = DurumDegeri(durum);
             await _context.SaveChangesAsync();
             return RedirectToPage();
         }
@@ -126,12 +126,9 @@ namespace PerdeProje.Pages
 
             return siparisler
                 .Where(siparis => anahtarlar.Any(anahtar => MetinIcerir(siparis.UrunAdi, anahtar)))
-                .Where(siparis => !DurumIcerir(siparis, "Paketlemeye Hazır")
-                    && !DurumIcerir(siparis, "Paketlendi")
-                    && !DurumIcerir(siparis, "Kargoya Teslim")
-                    && !DurumIcerir(siparis, "Kargoya Verildi")
-                    && !DurumIcerir(siparis, "Montaja Hazır")
-                    && !DurumIcerir(siparis, "Teslimat Başladı")
+                .Where(siparis => !PaketlemeyeGidecekMi(siparis)
+                    && !KargoyaGidecekMi(siparis)
+                    && !MontajaGidecekMi(siparis)
                     && !DurumIcerir(siparis, "Teslim Edildi"))
                 .ToList();
         }
@@ -143,8 +140,7 @@ namespace PerdeProje.Pages
                 .ToListAsync();
 
             return siparisler
-                .Where(siparis => DurumIcerir(siparis, "Paketlemeye Hazır")
-                    || DurumIcerir(siparis, "Kargoya Teslim"))
+                .Where(PaketlemeyeGidecekMi)
                 .ToList();
         }
 
@@ -155,8 +151,7 @@ namespace PerdeProje.Pages
                 .ToListAsync();
 
             return siparisler
-                .Where(siparis => DurumIcerir(siparis, "Paketlendi")
-                    || DurumIcerir(siparis, "Kargoya Teslim"))
+                .Where(KargoyaGidecekMi)
                 .ToList();
         }
 
@@ -167,9 +162,86 @@ namespace PerdeProje.Pages
                 .ToListAsync();
 
             return siparisler
-                .Where(siparis => DurumIcerir(siparis, "Montaja Hazır")
-                    || DurumIcerir(siparis, "Teslimat Başladı"))
+                .Where(MontajaGidecekMi)
                 .ToList();
+        }
+
+        private static string DurumDegeri(string durum)
+        {
+            var temizDurum = (durum ?? "").Trim();
+
+            if (MetinIcerir(temizDurum, "Terziye"))
+            {
+                return "Terziye Gönderiliyor";
+            }
+
+            if (MetinIcerir(temizDurum, "Dikime"))
+            {
+                return "Dikime Alındı";
+            }
+
+            if (MetinIcerir(temizDurum, "Dikim"))
+            {
+                return "Dikim Tamamlandı";
+            }
+
+            if (MetinIcerir(temizDurum, "Paketlemeye"))
+            {
+                return "Paketlemeye Hazır";
+            }
+
+            if (MetinIcerir(temizDurum, "Paketlendi"))
+            {
+                return "Paketlendi";
+            }
+
+            if (MetinIcerir(temizDurum, "Kargoya Verildi"))
+            {
+                return "Kargoya Verildi";
+            }
+
+            if (MetinIcerir(temizDurum, "Kargoya Teslim"))
+            {
+                return "Kargoya Teslim";
+            }
+
+            if (MetinIcerir(temizDurum, "Montaja"))
+            {
+                return "Montaja Hazır";
+            }
+
+            if (MetinIcerir(temizDurum, "Teslimat Başladı"))
+            {
+                return "Teslimat Başladı";
+            }
+
+            if (MetinIcerir(temizDurum, "Teslim Edildi"))
+            {
+                return "Teslim Edildi";
+            }
+
+            return temizDurum;
+        }
+
+        private static bool PaketlemeyeGidecekMi(Siparis siparis)
+        {
+            return DurumIcerir(siparis, "Paketleme")
+                && !DurumIcerir(siparis, "Paketlendi")
+                && !DurumIcerir(siparis, "Kargoya");
+        }
+
+        private static bool KargoyaGidecekMi(Siparis siparis)
+        {
+            return (DurumIcerir(siparis, "Paketlendi")
+                    || DurumIcerir(siparis, "Kargoya Teslim"))
+                && !DurumIcerir(siparis, "Kargoya Verildi");
+        }
+
+        private static bool MontajaGidecekMi(Siparis siparis)
+        {
+            return (DurumIcerir(siparis, "Montaja")
+                    || DurumIcerir(siparis, "Teslimat Başladı"))
+                && !DurumIcerir(siparis, "Teslim Edildi");
         }
 
         private static bool DurumIcerir(Siparis siparis, string durum)
