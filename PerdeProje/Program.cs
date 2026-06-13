@@ -194,3 +194,4 @@ static void SeedCatalog(ApplicationDbContext db)
         mevcut.Stok = katalogUrunu.Stok;
     }
 }
+

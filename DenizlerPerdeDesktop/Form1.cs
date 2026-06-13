@@ -436,11 +436,23 @@ public partial class Form1 : Form
         public IconButton(NavIcon icon)
         {
             _icon = icon;
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderSize = 0;
+            FlatAppearance.BorderColor = Color.White;
+            FlatAppearance.MouseDownBackColor = Color.White;
+            FlatAppearance.MouseOverBackColor = Color.White;
             BackColor = Color.White;
             ForeColor = Brand;
             TabStop = false;
+        }
+
+        protected override bool ShowFocusCues => false;
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            Parent?.Focus();
+            Invalidate();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -571,3 +583,4 @@ public partial class Form1 : Form
         return path;
     }
 }
+
