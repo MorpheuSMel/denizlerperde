@@ -119,7 +119,7 @@ namespace PerdeProje.Pages
             var rol = await AktifRolAsync();
             if (rol.Equals("Paketlemeci", StringComparison.OrdinalIgnoreCase))
             {
-                siparis.Durum = DurumKayitDegeri("Kargoya Teslim", "Kargo");
+                siparis.Durum = DurumKayitDegeri("Kargoya Gönderildi", "Kargo");
             }
             else
             {
@@ -301,6 +301,11 @@ namespace PerdeProje.Pages
                 return "Kargoya Verildi";
             }
 
+            if (MetinIcerir(temizDurum, "Kargoya Gönderildi"))
+            {
+                return "Kargoya Gönderildi";
+            }
+
             if (MetinIcerir(temizDurum, "Kargoya Teslim"))
             {
                 return "Kargoya Teslim";
@@ -335,7 +340,7 @@ namespace PerdeProje.Pages
                 {
                     "Terziye Gönderiliyor" or "Dikime Alındı" or "Dikim Tamamlandı" => "Terzi",
                     "Paketlemeye Hazır" => "Paketleme",
-                    "Paketlendi" or "Kargoya Teslim" => "Kargo",
+                    "Paketlendi" or "Kargoya Teslim" or "Kargoya Gönderildi" => "Kargo",
                     "Montaja Hazır" or "Teslimat Başladı" => "Montaj",
                     _ => ""
                 };
@@ -407,7 +412,8 @@ namespace PerdeProje.Pages
 
             return HedefIcerir(siparis, "Kargo")
                 || DurumIcerir(siparis, "Paketlendi")
-                || DurumIcerir(siparis, "Kargoya Teslim");
+                || DurumIcerir(siparis, "Kargoya Teslim")
+                || DurumIcerir(siparis, "Kargoya Gönderildi");
         }
 
         private static bool AktifKargolanabilirSiparisMi(Siparis siparis)
@@ -417,6 +423,7 @@ namespace PerdeProje.Pages
                 && !MontajaGidecekMi(siparis)
                 && (DurumIcerir(siparis, "Paketlendi")
                     || DurumIcerir(siparis, "Kargoya Teslim")
+                    || DurumIcerir(siparis, "Kargoya Gönderildi")
                     || HedefIcerir(siparis, "Kargo"));
         }
 
