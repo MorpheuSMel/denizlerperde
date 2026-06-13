@@ -58,7 +58,7 @@ namespace PerdeProje.Pages
             if (Rol.Equals("Paketlemeci", StringComparison.OrdinalIgnoreCase))
             {
                 PanelBasligi = "Paketleme Personeli Paneli";
-                Siparisler = await SiparisleriDurumaGoreGetir("Dikim Tamamlandı", "Montaja Hazır", "Hazırlanıyor", "Sipariş Alındı");
+                Siparisler = await SiparisleriDurumaGoreGetir("Paketlemeye Hazır", "Dikim Tamamlandı", "Montaja Hazır", "Hazırlanıyor", "Sipariş Alındı");
                 return Page();
             }
 
@@ -118,10 +118,11 @@ namespace PerdeProje.Pages
         private Task<List<Siparis>> SiparisleriDurumaGoreGetir(params string[] durumlar)
         {
             return _context.Siparisler
-                .Where(siparis => durumlar.Any(durum => siparis.Durum.Contains(durum)))
+                .Where(siparis => durumlar.Any(durum => ((siparis.Durum ?? "").Contains(durum))))
                 .OrderByDescending(siparis => siparis.SiparisTarihi)
                 .ToListAsync();
         }
     }
 }
+
 

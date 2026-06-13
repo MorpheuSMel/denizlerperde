@@ -136,7 +136,7 @@
             <h1 class="staff-title">@Model.PanelBasligi</h1>
             <p class="staff-note">Bu ekranda sadece sizin görevinize düşen işler görünür.</p>
         </div>
-        <a class="logout-button" href="/Auth/Logout">Çıkış Yap</a>
+        
     </section>
 
     @if (Model.Rol.Equals("Montajci", StringComparison.OrdinalIgnoreCase))
@@ -191,6 +191,7 @@
                             <button type="submit" name="durum" value="Dikime Alındı">Dikime Alındı</button>
                             <button type="submit" name="durum" value="Dikim Tamamlandı">Dikim Tamamlandı</button>
                             <button type="submit" name="durum" value="Montaja Hazır">Montaja Hazır</button>
+                            <button type="submit" name="durum" value="Paketlemeye Hazır">Paketlemeye Yolla</button>
                             <button type="submit" name="durum" value="Paketlendi">Paketlendi</button>
                             <button type="submit" name="durum" value="Kargoya Verildi">Kargoya Verildi</button>
                         </form>
@@ -200,5 +201,6 @@
         }
     }
 </main>
+
 
 

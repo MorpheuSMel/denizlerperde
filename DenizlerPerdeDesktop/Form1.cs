@@ -110,6 +110,7 @@ public partial class Form1 : Form
         nav.Controls.Add(CreateNavItem("Sepet", "Alışveriş listesi", "/Sepet"));
         nav.Controls.Add(CreateNavItem("Randevu", "Ölçü ve montaj", "/Randevu"));
         nav.Controls.Add(CreateNavItem("Giriş", "Admin / çalışan / müşteri", "/Auth/Login"));
+        nav.Controls.Add(CreateNavItem("Çıkış Yap", "Oturumu kapat", "/Auth/Logout", false, true));
 
         sidebar.Controls.Add(nav);
         sidebar.Controls.Add(brandBox);
@@ -248,9 +249,9 @@ public partial class Form1 : Form
         _loadingOverlay.Controls.Add(box);
     }
 
-    private NavItem CreateNavItem(string title, string description, string path, bool active = false)
+    private NavItem CreateNavItem(string title, string description, string path, bool active = false, bool danger = false)
     {
-        var item = new NavItem(title, description)
+        var item = new NavItem(title, description, danger)
         {
             Width = 250,
             Height = 62,
@@ -439,7 +440,7 @@ public partial class Form1 : Form
         {
             _icon = icon;
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.Selectable, true);
-            BackColor = Color.Transparent;
+            BackColor = Cream;
             ForeColor = Brand;
             TabStop = false;
         }
@@ -552,11 +553,13 @@ public partial class Form1 : Form
     {
         private readonly Label _title;
         private readonly Label _description;
+        private readonly bool _danger;
 
-        public NavItem(string title, string description)
+        public NavItem(string title, string description, bool danger = false)
         {
             Radius = 18;
-            BackColor = BrandDeep;
+            _danger = danger;
+            BackColor = danger ? Color.FromArgb(92, 35, 35) : BrandDeep;
 
             _title = new Label
             {
@@ -579,9 +582,9 @@ public partial class Form1 : Form
 
         public void SetActive(bool active)
         {
-            BackColor = active ? Accent : BrandDeep;
+            BackColor = active ? Accent : _danger ? Color.FromArgb(92, 35, 35) : BrandDeep;
             _title.ForeColor = active ? BrandDeep : Color.White;
-            _description.ForeColor = active ? Brand : Color.FromArgb(214, 198, 187);
+            _description.ForeColor = active ? Brand : _danger ? Color.FromArgb(255, 210, 210) : Color.FromArgb(214, 198, 187);
             Invalidate();
         }
     }
@@ -603,5 +606,7 @@ public partial class Form1 : Form
         return path;
     }
 }
+
+
 
 

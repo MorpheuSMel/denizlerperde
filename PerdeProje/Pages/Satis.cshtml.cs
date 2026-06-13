@@ -18,6 +18,7 @@ namespace PerdeProje.Pages
 
         public List<Urun> Urunler { get; set; } = new();
         public List<string> Kategoriler { get; set; } = new();
+        public HashSet<int> FavoriUrunIds { get; set; } = new();
 
         [BindProperty(SupportsGet = true)]
         public string? Kategori { get; set; }
@@ -64,6 +65,16 @@ namespace PerdeProje.Pages
             };
 
             Urunler = await sorgu.ToListAsync();
+
+            var userIdStr = HttpContext.Session.GetString("UserId");
+            if (!string.IsNullOrWhiteSpace(userIdStr) && int.TryParse(userIdStr, out var userId))
+            {
+                FavoriUrunIds = (await _context.Favoriler
+                    .Where(favori => favori.KullaniciId == userId)
+                    .Select(favori => favori.UrunId)
+                    .ToListAsync())
+                    .ToHashSet();
+            }
         }
 
         public async Task<IActionResult> OnPostSepeteEkleAsync(int id)
@@ -116,29 +127,34 @@ namespace PerdeProje.Pages
                 return RedirectToPage();
             }
 
-            var zatenVar = await _context.Favoriler
-                .AnyAsync(favori => favori.KullaniciId == userId && favori.UrunId == id);
+            var mevcutFavori = await _context.Favoriler
+                .FirstOrDefaultAsync(favori => favori.KullaniciId == userId && favori.UrunId == id);
 
-            if (!zatenVar)
+            try
             {
-                _context.Favoriler.Add(new Favori
+                if (mevcutFavori == null)
                 {
-                    KullaniciId = userId,
-                    UrunId = id,
-                    UrunAdi = urun.Ad
-                });
-                try
-                {
-                    await _context.SaveChangesAsync();
+                    _context.Favoriler.Add(new Favori
+                    {
+                        KullaniciId = userId,
+                        UrunId = id,
+                        UrunAdi = urun.Ad
+                    });
+                    Mesaj = "Ürün favorilere eklendi.";
                 }
-                catch
+                else
                 {
-                    Mesaj = "Favorilere eklenirken bir sorun oluştu. Lütfen tekrar deneyin.";
-                    return RedirectToPage(new { Kategori, Siralama });
+                    _context.Favoriler.Remove(mevcutFavori);
+                    Mesaj = "Ürün favorilerden kaldırıldı.";
                 }
-            }
 
-            Mesaj = zatenVar ? "Bu ürün zaten favorilerinizde." : "Ürün favorilere eklendi.";
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                Mesaj = "Favori işlemi yapılırken bir sorun oluştu. Lütfen tekrar deneyin.";
+                return RedirectToPage(new { Kategori, Siralama });
+            }
             return RedirectToPage(new { Kategori, Siralama });
         }
 
@@ -259,3 +275,4 @@ namespace PerdeProje.Pages
         };
     }
 }
+

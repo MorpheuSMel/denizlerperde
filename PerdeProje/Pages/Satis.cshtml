@@ -55,6 +55,7 @@
         {
             @foreach (var item in Model.Urunler)
             {
+                var favorideMi = Model.FavoriUrunIds.Contains(item.Id);
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
 
@@ -85,8 +86,8 @@
                                 <div class="d-flex gap-2">
                                     <form method="post" action="/Satis?handler=FavoriyeEkle&id=@item.Id" style="margin:0;">
                                         @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn action-heart-btn" title="Favorilere ekle">
-                                            <i class="far fa-heart"></i>
+                                        <button type="submit" class="btn action-heart-btn @(favorideMi ? "is-favorite" : "")" title="@(favorideMi ? "Favorilerden kaldır" : "Favorilere ekle")" aria-label="@(favorideMi ? "Favorilerden kaldır" : "Favorilere ekle")">
+                                            <i class="@(favorideMi ? "fas" : "far") fa-heart"></i>
                                         </button>
                                     </form>
                                     @if (!string.IsNullOrWhiteSpace(HttpContext.Session.GetString("UserId")))
@@ -135,11 +136,17 @@
         transition: all 0.2s ease;
     }
 
-    .action-heart-btn:hover {
+    .action-heart-btn:hover,
+    .action-heart-btn.is-favorite {
         background: #9f4f4f;
         border-color: #9f4f4f;
         color: #fff;
         transform: translateY(-1px);
+    }
+
+    .action-heart-btn.is-favorite:hover {
+        background: #fff8f5;
+        color: #9f4f4f;
     }
 
     .cart-action-btn {
@@ -181,3 +188,4 @@
         background: #fff;
     }
 </style>
+
