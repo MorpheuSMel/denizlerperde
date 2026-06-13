@@ -1,0 +1,166 @@
+@page
+@model PerdeProje.Pages.CalisanPanelModel
+@{
+    ViewData["Title"] = Model.PanelBasligi;
+}
+
+<style>
+    .staff-page {
+        max-width: 1180px;
+        margin: 42px auto;
+        padding: 0 20px;
+        color: #4f4038;
+    }
+
+    .staff-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 26px;
+    }
+
+    .staff-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #6f5343;
+        margin: 0;
+    }
+
+    .staff-note {
+        margin: 8px 0 0;
+        color: #7a716d;
+    }
+
+    .staff-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+    }
+
+    .task-card {
+        background: #fff;
+        border: 1px solid #eadfd6;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 10px 24px rgba(80, 55, 42, 0.08);
+    }
+
+    .task-card h3 {
+        margin: 0 0 8px;
+        color: #6f5343;
+        font-size: 1.15rem;
+    }
+
+    .task-meta {
+        display: grid;
+        gap: 6px;
+        color: #5f5651;
+        margin: 12px 0 16px;
+        font-size: 0.95rem;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        width: fit-content;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #f3e7dc;
+        color: #6f5343;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    .task-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .task-actions button {
+        border: 0;
+        border-radius: 6px;
+        padding: 9px 12px;
+        background: #6f5343;
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .empty-state {
+        background: #fff;
+        border: 1px dashed #dac9bd;
+        border-radius: 8px;
+        padding: 34px;
+        text-align: center;
+        color: #7a716d;
+    }
+</style>
+
+<main class="staff-page">
+    <section class="staff-header">
+        <div>
+            <h1 class="staff-title">@Model.PanelBasligi</h1>
+            <p class="staff-note">Bu ekranda sadece sizin görevinize düşen işler görünür.</p>
+        </div>
+    </section>
+
+    @if (Model.Rol.Equals("Montajci", StringComparison.OrdinalIgnoreCase))
+    {
+        @if (Model.Randevular.Count == 0)
+        {
+            <div class="empty-state">Şu anda montaj veya ölçü işi bulunmuyor.</div>
+        }
+        else
+        {
+            <section class="staff-grid">
+                @foreach (var randevu in Model.Randevular)
+                {
+                    <article class="task-card">
+                        <span class="status-pill">@randevu.DurumEtiketi</span>
+                        <h3>@randevu.MusteriAdi</h3>
+                        <div class="task-meta">
+                            <span><strong>Perde:</strong> @randevu.PerdeTuru</span>
+                            <span><strong>Tarih/Saat:</strong> @randevu.Olcu</span>
+                            <span><strong>Adres/Not:</strong> @randevu.PileTipi</span>
+                        </div>
+                        <form method="post" asp-page-handler="RandevuDurum" class="task-actions">
+                            <input type="hidden" name="id" value="@randevu.Id" />
+                            <button type="submit" name="durum" value="Montaj Planlandı">Montaj Planlandı</button>
+                            <button type="submit" name="durum" value="Montaj Tamamlandı">Montaj Tamamlandı</button>
+                        </form>
+                    </article>
+                }
+            </section>
+        }
+    }
+    else
+    {
+        @if (Model.Siparisler.Count == 0)
+        {
+            <div class="empty-state">Şu anda size atanmış sipariş bulunmuyor.</div>
+        }
+        else
+        {
+            <section class="staff-grid">
+                @foreach (var siparis in Model.Siparisler)
+                {
+                    <article class="task-card">
+                        <span class="status-pill">@siparis.Durum</span>
+                        <h3>@siparis.UrunAdi</h3>
+                        <div class="task-meta">
+                            <span><strong>Sipariş Kodu:</strong> @siparis.SiparisKodu</span>
+                            <span><strong>Tarih:</strong> @siparis.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</span>
+                        </div>
+                        <form method="post" asp-page-handler="SiparisDurum" class="task-actions">
+                            <input type="hidden" name="id" value="@siparis.Id" />
+                            <button type="submit" name="durum" value="Dikime Alındı">Dikime Alındı</button>
+                            <button type="submit" name="durum" value="Dikim Tamamlandı">Dikim Tamamlandı</button>
+                            <button type="submit" name="durum" value="Montaja Hazır">Montaja Hazır</button>
+                        </form>
+                    </article>
+                }
+            </section>
+        }
+    }
+</main>

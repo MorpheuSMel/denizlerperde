@@ -46,6 +46,8 @@ namespace PerdeProje.Pages.Auth
                 EnsureAdminAccount();
             }
 
+            EnsureEmployeeAccount(temizEmail);
+
             var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == temizEmail.ToLower());
 
             if (user == null)
@@ -67,9 +69,16 @@ namespace PerdeProje.Pages.Auth
             HttpContext.Session.SetString("UserName", $"{user.Ad} {user.Soyad}");
             HttpContext.Session.SetString("UserRole", user.Rol ?? "User");
 
-            if (!string.IsNullOrEmpty(user.Rol) && user.Rol.Trim().ToLower() == "admin")
+            var rol = user.Rol?.Trim().ToLower() ?? "musteri";
+
+            if (rol == "admin")
             {
                 return RedirectToPage("/Admin/Dashboard");
+            }
+
+            if (rol == "fonterzisi" || rol == "tulterzisi" || rol == "montajci")
+            {
+                return RedirectToPage("/CalisanPanel");
             }
 
             return RedirectToPage("/KullaniciSayfasi");
@@ -105,6 +114,57 @@ namespace PerdeProje.Pages.Auth
                 admin.Sifre = PasswordHasher.HashPassword("123456");
                 admin.Rol = "Admin";
                 admin.AktifMi = true;
+            }
+
+            _context.SaveChanges();
+        }
+
+        private void EnsureEmployeeAccount(string email)
+        {
+            var normalizedEmail = email.Trim().ToLower();
+
+            if (normalizedEmail == "fon@denizlerperde.com")
+            {
+                EnsureEmployee("Fon", "Terzisi", normalizedEmail, "FonTerzisi");
+            }
+            else if (normalizedEmail == "tul@denizlerperde.com")
+            {
+                EnsureEmployee("Tül", "Terzisi", normalizedEmail, "TulTerzisi");
+            }
+            else if (normalizedEmail == "montaj@denizlerperde.com")
+            {
+                EnsureEmployee("Montaj", "Ekibi", normalizedEmail, "Montajci");
+            }
+        }
+
+        private void EnsureEmployee(string ad, string soyad, string email, string rol)
+        {
+            var employee = _context.Users.FirstOrDefault(u => u.Email.ToLower() == email);
+
+            if (employee == null)
+            {
+                employee = new User
+                {
+                    Ad = ad,
+                    Soyad = soyad,
+                    Email = email,
+                    Telefon = "0532 452 11 13",
+                    Sifre = PasswordHasher.HashPassword("Denizler2026!"),
+                    Rol = rol,
+                    AktifMi = true,
+                    OlusturmaTarihi = DateTime.Now
+                };
+
+                _context.Users.Add(employee);
+            }
+            else
+            {
+                employee.Ad = ad;
+                employee.Soyad = soyad;
+                employee.Telefon = string.IsNullOrWhiteSpace(employee.Telefon) ? "0532 452 11 13" : employee.Telefon;
+                employee.Sifre = PasswordHasher.HashPassword("Denizler2026!");
+                employee.Rol = rol;
+                employee.AktifMi = true;
             }
 
             _context.SaveChanges();

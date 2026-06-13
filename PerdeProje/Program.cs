@@ -37,6 +37,7 @@ using (var scope = app.Services.CreateScope())
 
     db.Database.EnsureCreated();
     SeedAdmin(db);
+    SeedEmployees(db);
     SeedCatalog(db);
     db.SaveChanges();
 }
@@ -94,6 +95,41 @@ static void SeedAdmin(ApplicationDbContext db)
     admin.Sifre = PasswordHasher.HashPassword("123456");
     admin.Rol = "Admin";
     admin.AktifMi = true;
+}
+
+static void SeedEmployees(ApplicationDbContext db)
+{
+    EnsureEmployee(db, "Fon", "Terzisi", "fon@denizlerperde.com", "FonTerzisi");
+    EnsureEmployee(db, "Tül", "Terzisi", "tul@denizlerperde.com", "TulTerzisi");
+    EnsureEmployee(db, "Montaj", "Ekibi", "montaj@denizlerperde.com", "Montajci");
+}
+
+static void EnsureEmployee(ApplicationDbContext db, string ad, string soyad, string email, string rol)
+{
+    var employee = db.Users.FirstOrDefault(u => u.Email == email);
+
+    if (employee == null)
+    {
+        db.Users.Add(new User
+        {
+            Ad = ad,
+            Soyad = soyad,
+            Email = email,
+            Telefon = "0532 452 11 13",
+            Sifre = PasswordHasher.HashPassword("Denizler2026!"),
+            Rol = rol,
+            AktifMi = true,
+            OlusturmaTarihi = DateTime.Now
+        });
+        return;
+    }
+
+    employee.Ad = ad;
+    employee.Soyad = soyad;
+    employee.Telefon = "0532 452 11 13";
+    employee.Sifre = PasswordHasher.HashPassword("Denizler2026!");
+    employee.Rol = rol;
+    employee.AktifMi = true;
 }
 
 static void SeedCatalog(ApplicationDbContext db)
