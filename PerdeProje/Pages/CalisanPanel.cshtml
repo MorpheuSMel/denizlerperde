@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model PerdeProje.Pages.CalisanPanelModel
 @{
     ViewData["Title"] = Model.PanelBasligi;
@@ -15,7 +15,7 @@
     .staff-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         gap: 18px;
         margin-bottom: 26px;
     }
@@ -30,6 +30,29 @@
     .staff-note {
         margin: 8px 0 0;
         color: #7a716d;
+    }
+
+    .logout-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        min-width: 128px;
+        height: 44px;
+        padding: 0 18px;
+        border: 1px solid #6f5343;
+        border-radius: 10px;
+        background: #6f5343;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 800;
+        box-shadow: 0 10px 22px rgba(80, 55, 42, 0.14);
+    }
+
+    .logout-button:hover {
+        color: #fff;
+        background: #553c30;
+        border-color: #553c30;
     }
 
     .staff-grid {
@@ -95,6 +118,16 @@
         text-align: center;
         color: #7a716d;
     }
+
+    @@media (max-width: 640px) {
+        .staff-header {
+            flex-direction: column;
+        }
+
+        .logout-button {
+            width: 100%;
+        }
+    }
 </style>
 
 <main class="staff-page">
@@ -103,6 +136,7 @@
             <h1 class="staff-title">@Model.PanelBasligi</h1>
             <p class="staff-note">Bu ekranda sadece sizin görevinize düşen işler görünür.</p>
         </div>
+        <a class="logout-button" asp-page="/Auth/Logout">Çıkış Yap</a>
     </section>
 
     @if (Model.Rol.Equals("Montajci", StringComparison.OrdinalIgnoreCase))

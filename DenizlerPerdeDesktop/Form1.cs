@@ -1,4 +1,4 @@
-using Microsoft.Web.WebView2.Core;
+﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
@@ -131,7 +131,7 @@ public partial class Form1 : Form
 
         var topbar = new Panel { Dock = DockStyle.Fill, BackColor = Cream };
 
-        var menuButton = CreateIconButton("☰", "Menüyü aç/kapat", (_, _) => ToggleSidebar());
+        var menuButton = CreateIconButton(NavIcon.Menu, "Menüyü aç/kapat", (_, _) => ToggleSidebar());
         menuButton.Location = new Point(0, 16);
         topbar.Controls.Add(menuButton);
 
@@ -159,9 +159,9 @@ public partial class Form1 : Form
             BackColor = Cream,
             Padding = new Padding(0, 14, 0, 0)
         };
-        quick.Controls.Add(CreateIconButton("⟳", "Yenile", (_, _) => Reload()));
-        quick.Controls.Add(CreateIconButton("→", "İleri", (_, _) => { if (_webView.CanGoForward) _webView.GoForward(); }));
-        quick.Controls.Add(CreateIconButton("←", "Geri", (_, _) => { if (_webView.CanGoBack) _webView.GoBack(); }));
+        quick.Controls.Add(CreateIconButton(NavIcon.Refresh, "Yenile", (_, _) => Reload()));
+        quick.Controls.Add(CreateIconButton(NavIcon.Forward, "İleri", (_, _) => { if (_webView.CanGoForward) _webView.GoForward(); }));
+        quick.Controls.Add(CreateIconButton(NavIcon.Back, "Geri", (_, _) => { if (_webView.CanGoBack) _webView.GoBack(); }));
         topbar.Controls.Add(quick);
 
         var frame = new RoundedPanel
@@ -288,6 +288,19 @@ public partial class Form1 : Form
         _root.ColumnStyles[0].Width = _sidebarCollapsed ? 0 : 306;
     }
 
+    private void CollapseSidebarAfterLogin()
+    {
+        var currentPath = _webView.Source?.AbsolutePath ?? "";
+        var shouldCollapse = currentPath.Contains("/Admin", StringComparison.OrdinalIgnoreCase)
+            || currentPath.Contains("/CalisanPanel", StringComparison.OrdinalIgnoreCase)
+            || currentPath.Contains("/KullaniciSayfasi", StringComparison.OrdinalIgnoreCase);
+
+        if (shouldCollapse && !_sidebarCollapsed)
+        {
+            ToggleSidebar();
+        }
+    }
+
     private static Button CreateTopPill(string text, EventHandler onClick)
     {
         var button = new Button
@@ -308,29 +321,19 @@ public partial class Form1 : Form
         return button;
     }
 
-    private static Button CreateIconButton(string symbol, string tooltip, EventHandler onClick)
+    private static Button CreateIconButton(NavIcon icon, string tooltip, EventHandler onClick)
     {
-        var button = new Button
+        var button = new IconButton(icon)
         {
-            Text = symbol,
             Width = 40,
             Height = 40,
             Margin = new Padding(8, 0, 0, 0),
-            FlatStyle = FlatStyle.Flat,
-            BackColor = Color.White,
-            ForeColor = Brand,
-            Font = new Font("Segoe UI Symbol", 15, FontStyle.Bold),
-            Cursor = Cursors.Hand,
-            TextAlign = ContentAlignment.MiddleCenter
+            Cursor = Cursors.Hand
         };
 
-        button.FlatAppearance.BorderColor = Line;
-        button.FlatAppearance.BorderSize = 1;
         button.Click += onClick;
-
         var tip = new ToolTip { InitialDelay = 250, ReshowDelay = 100 };
         tip.SetToolTip(button, tooltip);
-
         return button;
     }
 
@@ -376,6 +379,7 @@ public partial class Form1 : Form
         _renderRetryCount = 0;
         _loadingOverlay.Visible = false;
         _statusLabel.Text = "Hazır";
+        CollapseSidebarAfterLogin();
     }
 
     private void ShowLoading(string message)
@@ -414,6 +418,71 @@ public partial class Form1 : Form
         if (File.Exists(iconPath))
         {
             Icon = new Icon(iconPath);
+        }
+    }
+
+    private enum NavIcon
+    {
+        Menu,
+        Back,
+        Forward,
+        Refresh
+    }
+
+    private sealed class IconButton : Button
+    {
+        private readonly NavIcon _icon;
+
+        public IconButton(NavIcon icon)
+        {
+            _icon = icon;
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderSize = 0;
+            BackColor = Color.White;
+            ForeColor = Brand;
+            TabStop = false;
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            using var fill = new SolidBrush(BackColor);
+            using var border = new Pen(Line, 1.2f);
+            using var path = RoundedRectangle(new Rectangle(0, 0, Width - 1, Height - 1), 8);
+            e.Graphics.FillPath(fill, path);
+            e.Graphics.DrawPath(border, path);
+
+            using var pen = new Pen(Brand, 2.4f)
+            {
+                StartCap = LineCap.Round,
+                EndCap = LineCap.Round,
+                LineJoin = LineJoin.Round
+            };
+
+            var centerY = Height / 2f;
+            switch (_icon)
+            {
+                case NavIcon.Menu:
+                    e.Graphics.DrawLine(pen, 12, 14, 28, 14);
+                    e.Graphics.DrawLine(pen, 12, 20, 28, 20);
+                    e.Graphics.DrawLine(pen, 12, 26, 28, 26);
+                    break;
+                case NavIcon.Back:
+                    e.Graphics.DrawLine(pen, 26, centerY, 14, centerY);
+                    e.Graphics.DrawLine(pen, 14, centerY, 20, centerY - 6);
+                    e.Graphics.DrawLine(pen, 14, centerY, 20, centerY + 6);
+                    break;
+                case NavIcon.Forward:
+                    e.Graphics.DrawLine(pen, 14, centerY, 26, centerY);
+                    e.Graphics.DrawLine(pen, 26, centerY, 20, centerY - 6);
+                    e.Graphics.DrawLine(pen, 26, centerY, 20, centerY + 6);
+                    break;
+                case NavIcon.Refresh:
+                    e.Graphics.DrawArc(pen, 12, 12, 16, 16, 35, 285);
+                    e.Graphics.DrawLine(pen, 27, 12, 27, 18);
+                    e.Graphics.DrawLine(pen, 27, 12, 21, 12);
+                    break;
+            }
         }
     }
 

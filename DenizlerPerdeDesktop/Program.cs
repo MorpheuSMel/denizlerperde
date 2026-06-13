@@ -1,4 +1,4 @@
-namespace DenizlerPerdeDesktop;
+﻿namespace DenizlerPerdeDesktop;
 
 static class Program
 {
@@ -21,5 +21,5 @@ static class Program
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }
-    }    
+    }
 }
