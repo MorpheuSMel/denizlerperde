@@ -141,7 +141,7 @@
 
     @if (Model.Rol.Equals("Montajci", StringComparison.OrdinalIgnoreCase))
     {
-        @if (Model.Randevular.Count == 0)
+        @if (Model.Randevular.Count == 0 && Model.Siparisler.Count == 0)
         {
             <div class="empty-state">Şu anda montaj veya ölçü işi bulunmuyor.</div>
         }
@@ -162,6 +162,23 @@
                             <input type="hidden" name="id" value="@randevu.Id" />
                             <button type="submit" name="durum" value="Montaj Planlandı">Montaj Planlandı</button>
                             <button type="submit" name="durum" value="Montaj Tamamlandı">Montaj Tamamlandı</button>
+                        </form>
+                    </article>
+                }
+
+                @foreach (var siparis in Model.Siparisler)
+                {
+                    <article class="task-card">
+                        <span class="status-pill">@siparis.Durum</span>
+                        <h3>@siparis.UrunAdi</h3>
+                        <div class="task-meta">
+                            <span><strong>Sipariş Kodu:</strong> @siparis.SiparisKodu</span>
+                            <span><strong>Tarih:</strong> @siparis.SiparisTarihi.ToString("dd.MM.yyyy HH:mm")</span>
+                        </div>
+                        <form method="post" asp-page-handler="SiparisDurum" class="task-actions">
+                            <input type="hidden" name="id" value="@siparis.Id" />
+                            <button type="submit" name="durum" value="Teslimat Başladı">Montaja Başla</button>
+                            <button type="submit" name="durum" value="Teslim Edildi">Montaj Tamamlandı</button>
                         </form>
                     </article>
                 }

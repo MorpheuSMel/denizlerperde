@@ -21,6 +21,7 @@ namespace PerdeProje.Pages
         public bool AkilliSistemciMi => Rol.Equals("AkilliSistemci", StringComparison.OrdinalIgnoreCase);
         public bool PaketlemeciMi => Rol.Equals("Paketlemeci", StringComparison.OrdinalIgnoreCase);
         public bool KargocuMu => Rol.Equals("Kargocu", StringComparison.OrdinalIgnoreCase);
+        public bool MontajciMi => Rol.Equals("Montajci", StringComparison.OrdinalIgnoreCase);
         public List<Siparis> Siparisler { get; set; } = new();
         public List<Randevu> Randevular { get; set; } = new();
 
@@ -79,6 +80,7 @@ namespace PerdeProje.Pages
                 Randevular = await _context.Randevular
                     .OrderByDescending(randevu => randevu.Id)
                     .ToListAsync();
+                Siparisler = await MontajaGidecekSiparisleriGetir();
                 return Page();
             }
 
@@ -126,24 +128,48 @@ namespace PerdeProje.Pages
                 .Where(siparis => anahtarlar.Any(anahtar => MetinIcerir(siparis.UrunAdi, anahtar)))
                 .Where(siparis => !DurumIcerir(siparis, "Paketlemeye Hazır")
                     && !DurumIcerir(siparis, "Paketlendi")
-                    && !DurumIcerir(siparis, "Kargoya Verildi"))
+                    && !DurumIcerir(siparis, "Kargoya Teslim")
+                    && !DurumIcerir(siparis, "Kargoya Verildi")
+                    && !DurumIcerir(siparis, "Montaja Hazır")
+                    && !DurumIcerir(siparis, "Teslimat Başladı")
+                    && !DurumIcerir(siparis, "Teslim Edildi"))
                 .ToList();
         }
 
-        private Task<List<Siparis>> PaketlenecekSiparisleriGetir()
+        private async Task<List<Siparis>> PaketlenecekSiparisleriGetir()
         {
-            return _context.Siparisler
-                .Where(siparis => (siparis.Durum ?? "").Contains("Paketlemeye Hazır"))
+            var siparisler = await _context.Siparisler
                 .OrderByDescending(siparis => siparis.SiparisTarihi)
                 .ToListAsync();
+
+            return siparisler
+                .Where(siparis => DurumIcerir(siparis, "Paketlemeye Hazır")
+                    || DurumIcerir(siparis, "Kargoya Teslim"))
+                .ToList();
         }
 
-        private Task<List<Siparis>> KargoyaGidecekSiparisleriGetir()
+        private async Task<List<Siparis>> KargoyaGidecekSiparisleriGetir()
         {
-            return _context.Siparisler
-                .Where(siparis => (siparis.Durum ?? "").Contains("Paketlendi"))
+            var siparisler = await _context.Siparisler
                 .OrderByDescending(siparis => siparis.SiparisTarihi)
                 .ToListAsync();
+
+            return siparisler
+                .Where(siparis => DurumIcerir(siparis, "Paketlendi")
+                    || DurumIcerir(siparis, "Kargoya Teslim"))
+                .ToList();
+        }
+
+        private async Task<List<Siparis>> MontajaGidecekSiparisleriGetir()
+        {
+            var siparisler = await _context.Siparisler
+                .OrderByDescending(siparis => siparis.SiparisTarihi)
+                .ToListAsync();
+
+            return siparisler
+                .Where(siparis => DurumIcerir(siparis, "Montaja Hazır")
+                    || DurumIcerir(siparis, "Teslimat Başladı"))
+                .ToList();
         }
 
         private static bool DurumIcerir(Siparis siparis, string durum)
