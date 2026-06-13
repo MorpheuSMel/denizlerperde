@@ -6,6 +6,7 @@ using PerdeProje.Models;
 
 namespace PerdeProje.Pages
 {
+    [IgnoreAntiforgeryToken]
     public class CalisanPanelModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -17,6 +18,9 @@ namespace PerdeProje.Pages
 
         public string PanelBasligi { get; set; } = "Çalışan Paneli";
         public string Rol { get; set; } = "";
+        public bool AkilliSistemciMi => Rol.Equals("AkilliSistemci", StringComparison.OrdinalIgnoreCase);
+        public bool PaketlemeciMi => Rol.Equals("Paketlemeci", StringComparison.OrdinalIgnoreCase);
+        public bool KargocuMu => Rol.Equals("Kargocu", StringComparison.OrdinalIgnoreCase);
         public List<Siparis> Siparisler { get; set; } = new();
         public List<Randevu> Randevular { get; set; } = new();
 
@@ -83,14 +87,19 @@ namespace PerdeProje.Pages
 
         public async Task<IActionResult> OnPostSiparisDurumAsync(int id, string durum)
         {
-            var siparis = await _context.Siparisler.FindAsync(id);
-
-            if (siparis != null)
+            if (id <= 0 || string.IsNullOrWhiteSpace(durum))
             {
-                siparis.Durum = durum;
-                await _context.SaveChangesAsync();
+                return RedirectToPage();
             }
 
+            var siparis = await _context.Siparisler.FindAsync(id);
+            if (siparis == null)
+            {
+                return RedirectToPage();
+            }
+
+            siparis.Durum = durum.Trim();
+            await _context.SaveChangesAsync();
             return RedirectToPage();
         }
 
@@ -124,5 +133,6 @@ namespace PerdeProje.Pages
         }
     }
 }
+
 
 

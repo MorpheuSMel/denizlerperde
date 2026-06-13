@@ -188,12 +188,25 @@
                         </div>
                         <form method="post" asp-page-handler="SiparisDurum" class="task-actions">
                             <input type="hidden" name="id" value="@siparis.Id" />
-                            <button type="submit" name="durum" value="Dikime Alındı">Dikime Alındı</button>
-                            <button type="submit" name="durum" value="Dikim Tamamlandı">Dikim Tamamlandı</button>
-                            <button type="submit" name="durum" value="Montaja Hazır">Montaja Hazır</button>
-                            <button type="submit" name="durum" value="Paketlemeye Hazır">Paketlemeye Yolla</button>
-                            <button type="submit" name="durum" value="Paketlendi">Paketlendi</button>
-                            <button type="submit" name="durum" value="Kargoya Verildi">Kargoya Verildi</button>
+                            @if (Model.AkilliSistemciMi)
+                            {
+                                <button type="submit" name="durum" value="Paketlemeye Hazır">Paketlemeye Yolla</button>
+                            }
+                            else if (Model.PaketlemeciMi)
+                            {
+                                <button type="submit" name="durum" value="Paketlendi">Paketlendi</button>
+                            }
+                            else if (Model.KargocuMu)
+                            {
+                                <button type="submit" name="durum" value="Kargoya Verildi">Kargoya Verildi</button>
+                            }
+                            else
+                            {
+                                <button type="submit" name="durum" value="Dikime Alındı">Dikime Alındı</button>
+                                <button type="submit" name="durum" value="Dikim Tamamlandı">Dikim Tamamlandı</button>
+                                <button type="submit" name="durum" value="Montaja Hazır">Montaja Hazır</button>
+                                <button type="submit" name="durum" value="Paketlemeye Hazır">Paketlemeye Yolla</button>
+                            }
                         </form>
                     </article>
                 }
@@ -201,6 +214,7 @@
         }
     }
 </main>
+
 
 
 

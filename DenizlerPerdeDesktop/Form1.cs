@@ -21,6 +21,7 @@ public partial class Form1 : Form
     private readonly Label _pageLabel = new();
     private readonly Panel _loadingOverlay = new();
     private readonly List<NavItem> _navItems = new();
+    private NavItem? _logoutNavItem;
     private readonly TableLayoutPanel _root = new();
     private int _renderRetryCount;
     private bool _sidebarCollapsed;
@@ -46,7 +47,8 @@ public partial class Form1 : Form
         _root.ColumnCount = 2;
         _root.BackColor = Cream;
         _root.Padding = new Padding(8);
-        _root.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 306));
+        _root.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 0));
+        _sidebarCollapsed = true;
         _root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         _root.Controls.Add(BuildSidebar(), 0, 0);
         _root.Controls.Add(BuildWorkspace(), 1, 0);
@@ -97,7 +99,7 @@ public partial class Form1 : Form
         var nav = new FlowLayoutPanel
         {
             Dock = DockStyle.Top,
-            Height = 460,
+            Height = 560,
             FlowDirection = FlowDirection.TopDown,
             WrapContents = false,
             BackColor = BrandDeep,
@@ -110,7 +112,9 @@ public partial class Form1 : Form
         nav.Controls.Add(CreateNavItem("Sepet", "Alışveriş listesi", "/Sepet"));
         nav.Controls.Add(CreateNavItem("Randevu", "Ölçü ve montaj", "/Randevu"));
         nav.Controls.Add(CreateNavItem("Giriş", "Admin / çalışan / müşteri", "/Auth/Login"));
-        nav.Controls.Add(CreateNavItem("Çıkış Yap", "Oturumu kapat", "/Auth/Logout", false, true));
+        _logoutNavItem = CreateNavItem("Çıkış Yap", "Oturumu kapat", "/Auth/Logout", false, true);
+        _logoutNavItem.Visible = false;
+        nav.Controls.Add(_logoutNavItem);
 
         sidebar.Controls.Add(nav);
         sidebar.Controls.Add(brandBox);
@@ -281,12 +285,46 @@ public partial class Form1 : Form
 
         _pageLabel.Text = title;
         Navigate(path);
+        CloseSidebar();
     }
 
     private void ToggleSidebar()
     {
-        _sidebarCollapsed = !_sidebarCollapsed;
-        _root.ColumnStyles[0].Width = _sidebarCollapsed ? 0 : 306;
+        if (_sidebarCollapsed)
+        {
+            OpenSidebar();
+        }
+        else
+        {
+            CloseSidebar();
+        }
+    }
+
+    private void OpenSidebar()
+    {
+        _sidebarCollapsed = false;
+        _root.ColumnStyles[0].Width = 306;
+    }
+
+    private void CloseSidebar()
+    {
+        _sidebarCollapsed = true;
+        _root.ColumnStyles[0].Width = 0;
+    }
+
+    private void UpdateLogoutVisibility()
+    {
+        var currentPath = _webView.Source?.AbsolutePath ?? "";
+        var loggedInArea = currentPath.Contains("/Admin", StringComparison.OrdinalIgnoreCase)
+            || currentPath.Contains("/CalisanPanel", StringComparison.OrdinalIgnoreCase)
+            || currentPath.Contains("/KullaniciSayfasi", StringComparison.OrdinalIgnoreCase)
+            || currentPath.Contains("/Favorilerim", StringComparison.OrdinalIgnoreCase)
+            || currentPath.Contains("/HesapAyarlari", StringComparison.OrdinalIgnoreCase);
+
+        if (_logoutNavItem != null)
+        {
+            _logoutNavItem.Visible = loggedInArea;
+        }
     }
 
     private void CollapseSidebarAfterLogin()
@@ -298,7 +336,7 @@ public partial class Form1 : Form
 
         if (shouldCollapse && !_sidebarCollapsed)
         {
-            ToggleSidebar();
+            CloseSidebar();
         }
     }
 
@@ -380,6 +418,7 @@ public partial class Form1 : Form
         _renderRetryCount = 0;
         _loadingOverlay.Visible = false;
         _statusLabel.Text = "Hazır";
+        UpdateLogoutVisibility();
         CollapseSidebarAfterLogin();
     }
 
@@ -606,6 +645,8 @@ public partial class Form1 : Form
         return path;
     }
 }
+
+
 
 
 
