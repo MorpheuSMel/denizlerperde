@@ -116,19 +116,24 @@ namespace PerdeProje.Pages
             return RedirectToPage();
         }
 
-        private Task<List<Siparis>> SiparisleriGetir(params string[] anahtarlar)
+        private async Task<List<Siparis>> SiparisleriGetir(params string[] anahtarlar)
         {
-            return _context.Siparisler
-                .Where(siparis => anahtarlar.Any(anahtar => siparis.UrunAdi.Contains(anahtar)))
+            var siparisler = await _context.Siparisler
                 .OrderByDescending(siparis => siparis.SiparisTarihi)
                 .ToListAsync();
+
+            return siparisler
+                .Where(siparis => anahtarlar.Any(anahtar => MetinIcerir(siparis.UrunAdi, anahtar)))
+                .Where(siparis => !DurumIcerir(siparis, "Paketlemeye Hazır")
+                    && !DurumIcerir(siparis, "Paketlendi")
+                    && !DurumIcerir(siparis, "Kargoya Verildi"))
+                .ToList();
         }
 
         private Task<List<Siparis>> PaketlenecekSiparisleriGetir()
         {
             return _context.Siparisler
-                .Where(siparis => !((siparis.Durum ?? "").Contains("Paketlendi"))
-                    && !((siparis.Durum ?? "").Contains("Kargoya Verildi")))
+                .Where(siparis => (siparis.Durum ?? "").Contains("Paketlemeye Hazır"))
                 .OrderByDescending(siparis => siparis.SiparisTarihi)
                 .ToListAsync();
         }
@@ -139,6 +144,16 @@ namespace PerdeProje.Pages
                 .Where(siparis => (siparis.Durum ?? "").Contains("Paketlendi"))
                 .OrderByDescending(siparis => siparis.SiparisTarihi)
                 .ToListAsync();
+        }
+
+        private static bool DurumIcerir(Siparis siparis, string durum)
+        {
+            return MetinIcerir(siparis.Durum ?? "", durum);
+        }
+
+        private static bool MetinIcerir(string kaynak, string aranan)
+        {
+            return kaynak.IndexOf(aranan, StringComparison.CurrentCultureIgnoreCase) >= 0;
         }
     }
 }
