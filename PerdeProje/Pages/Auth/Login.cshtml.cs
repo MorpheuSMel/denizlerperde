@@ -16,7 +16,10 @@ namespace PerdeProje.Pages.Auth
             new("Admin", "Kullanıcı", "admin@admin.com", "123456", "Admin"),
             new("Fon", "Terzisi", "fon@denizlerperde.com", "Denizler2026!", "FonTerzisi"),
             new("Tül", "Terzisi", "tul@denizlerperde.com", "Denizler2026!", "TulTerzisi"),
-            new("Montaj", "Ekibi", "montaj@denizlerperde.com", "Denizler2026!", "Montajci")
+            new("Montaj", "Ekibi", "montaj@denizlerperde.com", "Denizler2026!", "Montajci"),
+            new("Akıllı Sistem", "Ustası", "akilli@denizlerperde.com", "Denizler2026!", "AkilliSistemci"),
+            new("Paketleme", "Personeli", "paket@denizlerperde.com", "Denizler2026!", "Paketlemeci"),
+            new("Kargo", "Personeli", "kargo@denizlerperde.com", "Denizler2026!", "Kargocu")
         };
 
         public LoginModel(ApplicationDbContext context)
@@ -60,6 +63,7 @@ namespace PerdeProje.Pages.Auth
             var sifreDogruMu = user.Sifre == Sifre
                 || PasswordHasher.VerifyPassword(Sifre, user.Sifre)
                 || (knownAccount != null && (Sifre == knownAccount.Sifre || Sifre == "123456"));
+
             if (!sifreDogruMu)
             {
                 ErrorMessage = "Şifre hatalı. Lütfen tekrar deneyin.";
@@ -77,12 +81,17 @@ namespace PerdeProje.Pages.Auth
                 return RedirectToPage("/Admin/Dashboard");
             }
 
-            if (rol == "fonterzisi" || rol == "tulterzisi" || rol == "montajci")
+            if (IsEmployeeRole(rol))
             {
                 return RedirectToPage("/CalisanPanel");
             }
 
             return RedirectToPage("/KullaniciSayfasi");
+        }
+
+        private static bool IsEmployeeRole(string rol)
+        {
+            return rol is "fonterzisi" or "tulterzisi" or "montajci" or "akillisistemci" or "paketlemeci" or "kargocu";
         }
 
         private void EnsureKnownAccounts()

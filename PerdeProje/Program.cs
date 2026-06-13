@@ -74,24 +74,17 @@ static void SeedAdmin(ApplicationDbContext db)
 {
     var admin = db.Users.FirstOrDefault(u => u.Email == "admin@admin.com")
         ?? db.Users.FirstOrDefault(u => u.Email == "admin@denizlerperde.com");
+
     if (admin == null)
     {
-        db.Users.Add(new User
-        {
-            Ad = "Admin",
-            Soyad = "Kullanıcı",
-            Email = "admin@admin.com",
-            Telefon = "0532 452 11 13",
-            Sifre = PasswordHasher.HashPassword("123456"),
-            Rol = "Admin",
-            AktifMi = true,
-            OlusturmaTarihi = DateTime.Now
-        });
-        return;
+        admin = new User { OlusturmaTarihi = DateTime.Now };
+        db.Users.Add(admin);
     }
 
-    admin.Telefon = "0532 452 11 13";
+    admin.Ad = "Admin";
+    admin.Soyad = "Kullanıcı";
     admin.Email = "admin@admin.com";
+    admin.Telefon = "0532 452 11 13";
     admin.Sifre = PasswordHasher.HashPassword("123456");
     admin.Rol = "Admin";
     admin.AktifMi = true;
@@ -102,6 +95,9 @@ static void SeedEmployees(ApplicationDbContext db)
     EnsureEmployee(db, "Fon", "Terzisi", "fon@denizlerperde.com", "FonTerzisi");
     EnsureEmployee(db, "Tül", "Terzisi", "tul@denizlerperde.com", "TulTerzisi");
     EnsureEmployee(db, "Montaj", "Ekibi", "montaj@denizlerperde.com", "Montajci");
+    EnsureEmployee(db, "Akıllı Sistem", "Ustası", "akilli@denizlerperde.com", "AkilliSistemci");
+    EnsureEmployee(db, "Paketleme", "Personeli", "paket@denizlerperde.com", "Paketlemeci");
+    EnsureEmployee(db, "Kargo", "Personeli", "kargo@denizlerperde.com", "Kargocu");
 }
 
 static void EnsureEmployee(ApplicationDbContext db, string ad, string soyad, string email, string rol)
@@ -110,22 +106,13 @@ static void EnsureEmployee(ApplicationDbContext db, string ad, string soyad, str
 
     if (employee == null)
     {
-        db.Users.Add(new User
-        {
-            Ad = ad,
-            Soyad = soyad,
-            Email = email,
-            Telefon = "0532 452 11 13",
-            Sifre = PasswordHasher.HashPassword("Denizler2026!"),
-            Rol = rol,
-            AktifMi = true,
-            OlusturmaTarihi = DateTime.Now
-        });
-        return;
+        employee = new User { OlusturmaTarihi = DateTime.Now };
+        db.Users.Add(employee);
     }
 
     employee.Ad = ad;
     employee.Soyad = soyad;
+    employee.Email = email;
     employee.Telefon = "0532 452 11 13";
     employee.Sifre = PasswordHasher.HashPassword("Denizler2026!");
     employee.Rol = rol;
@@ -159,11 +146,10 @@ static void SeedCatalog(ApplicationDbContext db)
         "Zebra Perde Beyaz",
         "Zebra Perde Krem",
         "Guneslik Stor Perde",
-        "GÃ¼neslik Stor Perde",
-        "GÃ¼neÅŸlik Stor Perde",
+        "Güneşlik Stor Perde",
         "Blackout Stor Perde",
         "Gipurlu Tul Perde",
-        "GipÃ¼rlÃ¼ Ã–rme TÃ¼l Perde",
+        "Gipürlü Örme Tül Perde",
         "Duz Ekru Tul Perde",
         "Keten Fon Perde",
         "Kadife Fon Perde"

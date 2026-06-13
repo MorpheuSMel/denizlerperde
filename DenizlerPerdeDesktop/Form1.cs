@@ -321,7 +321,7 @@ public partial class Form1 : Form
         return button;
     }
 
-    private static Button CreateIconButton(NavIcon icon, string tooltip, EventHandler onClick)
+    private static Control CreateIconButton(NavIcon icon, string tooltip, EventHandler onClick)
     {
         var button = new IconButton(icon)
         {
@@ -429,36 +429,56 @@ public partial class Form1 : Form
         Refresh
     }
 
-    private sealed class IconButton : Button
+    private sealed class IconButton : Control
     {
         private readonly NavIcon _icon;
+        private bool _hovered;
+        private bool _pressed;
 
         public IconButton(NavIcon icon)
         {
             _icon = icon;
-            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderSize = 0;
-            FlatAppearance.BorderColor = Color.White;
-            FlatAppearance.MouseDownBackColor = Color.White;
-            FlatAppearance.MouseOverBackColor = Color.White;
-            BackColor = Color.White;
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.Selectable, true);
+            BackColor = Color.Transparent;
             ForeColor = Brand;
             TabStop = false;
         }
 
-        protected override bool ShowFocusCues => false;
-
-        protected override void OnGotFocus(EventArgs e)
+        protected override void OnMouseEnter(EventArgs e)
         {
-            Parent?.Focus();
+            _hovered = true;
             Invalidate();
+            base.OnMouseEnter(e);
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            _hovered = false;
+            _pressed = false;
+            Invalidate();
+            base.OnMouseLeave(e);
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            _pressed = true;
+            Invalidate();
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            _pressed = false;
+            Invalidate();
+            base.OnMouseUp(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            using var fill = new SolidBrush(BackColor);
+            var fillColor = _pressed ? Soft : _hovered ? Color.FromArgb(253, 250, 247) : Color.White;
+
+            using var fill = new SolidBrush(fillColor);
             using var border = new Pen(Line, 1.2f);
             using var path = RoundedRectangle(new Rectangle(0, 0, Width - 1, Height - 1), 8);
             e.Graphics.FillPath(fill, path);
@@ -583,4 +603,5 @@ public partial class Form1 : Form
         return path;
     }
 }
+
 

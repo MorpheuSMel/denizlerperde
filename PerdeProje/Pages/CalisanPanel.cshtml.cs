@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PerdeProje.Data;
@@ -37,20 +37,35 @@ namespace PerdeProje.Pages
             if (Rol.Equals("FonTerzisi", StringComparison.OrdinalIgnoreCase))
             {
                 PanelBasligi = "Fon Perde Terzi Paneli";
-                Siparisler = await _context.Siparisler
-                    .Where(siparis => siparis.UrunAdi.Contains("Fon"))
-                    .OrderByDescending(siparis => siparis.SiparisTarihi)
-                    .ToListAsync();
+                Siparisler = await SiparisleriGetir("Fon");
                 return Page();
             }
 
             if (Rol.Equals("TulTerzisi", StringComparison.OrdinalIgnoreCase))
             {
                 PanelBasligi = "Tül Perde Terzi Paneli";
-                Siparisler = await _context.Siparisler
-                    .Where(siparis => siparis.UrunAdi.Contains("Tül") || siparis.UrunAdi.Contains("Tul"))
-                    .OrderByDescending(siparis => siparis.SiparisTarihi)
-                    .ToListAsync();
+                Siparisler = await SiparisleriGetir("Tül", "Tul");
+                return Page();
+            }
+
+            if (Rol.Equals("AkilliSistemci", StringComparison.OrdinalIgnoreCase))
+            {
+                PanelBasligi = "Akıllı Sistem Usta Paneli";
+                Siparisler = await SiparisleriGetir("Akıllı", "Akilli", "Motorlu", "Sistem");
+                return Page();
+            }
+
+            if (Rol.Equals("Paketlemeci", StringComparison.OrdinalIgnoreCase))
+            {
+                PanelBasligi = "Paketleme Personeli Paneli";
+                Siparisler = await SiparisleriDurumaGoreGetir("Dikim Tamamlandı", "Montaja Hazır", "Hazırlanıyor", "Sipariş Alındı");
+                return Page();
+            }
+
+            if (Rol.Equals("Kargocu", StringComparison.OrdinalIgnoreCase))
+            {
+                PanelBasligi = "Kargo Personeli Paneli";
+                Siparisler = await SiparisleriDurumaGoreGetir("Paketlendi", "Kargoya Hazır", "Kargoya Verilecek");
                 return Page();
             }
 
@@ -91,5 +106,22 @@ namespace PerdeProje.Pages
 
             return RedirectToPage();
         }
+
+        private Task<List<Siparis>> SiparisleriGetir(params string[] anahtarlar)
+        {
+            return _context.Siparisler
+                .Where(siparis => anahtarlar.Any(anahtar => siparis.UrunAdi.Contains(anahtar)))
+                .OrderByDescending(siparis => siparis.SiparisTarihi)
+                .ToListAsync();
+        }
+
+        private Task<List<Siparis>> SiparisleriDurumaGoreGetir(params string[] durumlar)
+        {
+            return _context.Siparisler
+                .Where(siparis => durumlar.Any(durum => siparis.Durum.Contains(durum)))
+                .OrderByDescending(siparis => siparis.SiparisTarihi)
+                .ToListAsync();
+        }
     }
 }
+
