@@ -252,13 +252,13 @@
                             <input type="hidden" name="id" value="@siparis.Id" />
                             @if (Model.AkilliSistemciMi)
                             {
+                                <input type="hidden" name="hedef" value="Paketleme" />
                                 <button type="submit" name="durum" value="Paketlemeye Hazır">Paketlemeye Yolla</button>
-                                <button type="submit" name="hedef" value="Paketleme" hidden></button>
                             }
                             else if (Model.PaketlemeciMi)
                             {
+                                <input type="hidden" name="hedef" value="Kargo" />
                                 <button type="submit" name="durum" value="Paketlendi">Paketlendi</button>
-                                <button type="submit" name="hedef" value="Kargo" hidden></button>
                             }
                             else if (Model.KargocuMu)
                             {
@@ -266,9 +266,7 @@
                             }
                             else
                             {
-                                <button type="submit" name="durum" value="Dikime Alındı">Dikime Alındı</button>
-                                <button type="submit" name="durum" value="Dikim Tamamlandı">Dikim Tamamlandı</button>
-                                <button type="submit" name="durum" value="Montaja Hazır">Montaja Hazır</button>
+                                <input type="hidden" name="hedef" value="Paketleme" />
                                 <button type="submit" name="durum" value="Paketlemeye Hazır">Paketlemeye Yolla</button>
                             }
                         </form>

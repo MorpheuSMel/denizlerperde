@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
 using PerdeProje.Data;
 using PerdeProje.Models;
-using PerdeProje.Pages.Admin;
 using PerdeProje.Services;
 using System;
 using System.Collections.Generic;
@@ -178,6 +177,6 @@ namespace PerdeProje.Pages
             return $"{rakamlar[..4]} {rakamlar.Substring(4, 3)} {rakamlar.Substring(7, 2)} {rakamlar.Substring(9, 2)}";
         }
 
-        public string DurumMetni(string? durum) => DashboardModel.DurumMetni(durum);
+        public string DurumMetni(string? durum) => CalisanPanelModel.GorunenDurum(durum);
     }
 }
