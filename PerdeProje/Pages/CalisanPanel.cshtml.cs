@@ -116,6 +116,8 @@ namespace PerdeProje.Pages
                 return RedirectToPage();
             }
 
+            var rol = await AktifRolAsync();
+            hedef = SonrakiHedef(rol, durum, hedef);
             siparis.Durum = DurumKayitDegeri(durum, hedef);
             await _context.SaveChangesAsync();
             return RedirectToPage();
@@ -148,6 +150,61 @@ namespace PerdeProje.Pages
                     && !MontajaGidecekMi(siparis)
                     && !DurumIcerir(siparis, "Teslim Edildi"))
                 .ToList();
+        }
+
+        private async Task<string> AktifRolAsync()
+        {
+            var rol = HttpContext.Session.GetString("UserRole") ?? "";
+            var sessionUserId = HttpContext.Session.GetString("UserId");
+
+            if (int.TryParse(sessionUserId, out var userId))
+            {
+                var veritabaniRolu = await _context.Users
+                    .Where(user => user.Id == userId)
+                    .Select(user => user.Rol)
+                    .FirstOrDefaultAsync();
+
+                if (!string.IsNullOrWhiteSpace(veritabaniRolu))
+                {
+                    rol = veritabaniRolu;
+                    HttpContext.Session.SetString("UserRole", rol);
+                }
+            }
+
+            return rol;
+        }
+
+        private static string SonrakiHedef(string rol, string durum, string hedef)
+        {
+            if (!string.IsNullOrWhiteSpace(HedefDegeri(hedef)))
+            {
+                return hedef;
+            }
+
+            if (rol.Equals("Paketlemeci", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Kargo";
+            }
+
+            if (rol.Equals("Kargocu", StringComparison.OrdinalIgnoreCase))
+            {
+                return "";
+            }
+
+            if (rol.Equals("Montajci", StringComparison.OrdinalIgnoreCase))
+            {
+                return "";
+            }
+
+            var temizDurum = DurumDegeri(durum);
+            return temizDurum switch
+            {
+                "Paketlemeye Hazır" => "Paketleme",
+                "Paketlendi" or "Kargoya Teslim" => "Kargo",
+                "Montaja Hazır" or "Teslimat Başladı" => "Montaj",
+                "Terziye Gönderiliyor" or "Dikime Alındı" or "Dikim Tamamlandı" => "Terzi",
+                _ => ""
+            };
         }
 
         private async Task<List<Siparis>> PaketlenecekSiparisleriGetir()
@@ -298,17 +355,23 @@ namespace PerdeProje.Pages
 
         private static bool PaketlemeyeGidecekMi(Siparis siparis)
         {
-            return (HedefIcerir(siparis, "Paketleme") || DurumIcerir(siparis, "Paketleme"))
+            return (HedefIcerir(siparis, "Paketleme")
+                    || DurumIcerir(siparis, "Paketleme")
+                    || DurumIcerir(siparis, "Paketlemeye Hazır"))
                 && !DurumIcerir(siparis, "Paketlendi")
                 && !DurumIcerir(siparis, "Kargoya");
         }
 
         private static bool KargoyaGidecekMi(Siparis siparis)
         {
-            return (HedefIcerir(siparis, "Kargo")
-                    || DurumIcerir(siparis, "Paketlendi")
-                    || DurumIcerir(siparis, "Kargoya Teslim"))
-                && !DurumIcerir(siparis, "Kargoya Verildi");
+            if (DurumIcerir(siparis, "Kargoya Verildi"))
+            {
+                return false;
+            }
+
+            return HedefIcerir(siparis, "Kargo")
+                || DurumIcerir(siparis, "Paketlendi")
+                || DurumIcerir(siparis, "Kargoya Teslim");
         }
 
         private static bool MontajaGidecekMi(Siparis siparis)
