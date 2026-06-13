@@ -234,8 +234,18 @@ namespace PerdeProje.Pages
                 .OrderByDescending(siparis => siparis.SiparisTarihi)
                 .ToListAsync();
 
-            return siparisler
+            var hedeflenenSiparisler = siparisler
                 .Where(KargoyaGidecekMi)
+                .ToList();
+
+            if (hedeflenenSiparisler.Count > 0)
+            {
+                return hedeflenenSiparisler;
+            }
+
+            return siparisler
+                .Where(AktifKargolanabilirSiparisMi)
+                .Take(12)
                 .ToList();
         }
 
@@ -391,6 +401,16 @@ namespace PerdeProje.Pages
             return HedefIcerir(siparis, "Kargo")
                 || DurumIcerir(siparis, "Paketlendi")
                 || DurumIcerir(siparis, "Kargoya Teslim");
+        }
+
+        private static bool AktifKargolanabilirSiparisMi(Siparis siparis)
+        {
+            return !DurumIcerir(siparis, "Kargoya Verildi")
+                && !DurumIcerir(siparis, "Teslim Edildi")
+                && !MontajaGidecekMi(siparis)
+                && (DurumIcerir(siparis, "Paketlendi")
+                    || DurumIcerir(siparis, "Kargoya Teslim")
+                    || HedefIcerir(siparis, "Kargo"));
         }
 
         private static bool MontajaGidecekMi(Siparis siparis)
