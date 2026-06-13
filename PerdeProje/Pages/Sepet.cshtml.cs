@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -74,7 +74,7 @@ namespace PerdeProje.Pages
 
             if (string.IsNullOrWhiteSpace(sepetIds))
             {
-                Mesaj = "Sepetiniz zaten boş.";
+                Mesaj = "Sepetiniz zaten boÅŸ.";
                 return RedirectToPage();
             }
 
@@ -211,3 +211,4 @@ namespace PerdeProje.Pages
         }
     }
 }
+

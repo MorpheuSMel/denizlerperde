@@ -621,9 +621,9 @@ public partial class Form1 : Form
 
         public void SetActive(bool active)
         {
-            BackColor = active ? Accent : _danger ? Color.FromArgb(92, 35, 35) : BrandDeep;
-            _title.ForeColor = active ? BrandDeep : Color.White;
-            _description.ForeColor = active ? Brand : _danger ? Color.FromArgb(255, 210, 210) : Color.FromArgb(214, 198, 187);
+            BackColor = _danger ? Color.FromArgb(150, 42, 42) : active ? Accent : BrandDeep;
+            _title.ForeColor = _danger ? Color.White : active ? BrandDeep : Color.White;
+            _description.ForeColor = _danger ? Color.FromArgb(255, 220, 220) : active ? Brand : Color.FromArgb(214, 198, 187);
             Invalidate();
         }
     }
@@ -645,6 +645,7 @@ public partial class Form1 : Form
         return path;
     }
 }
+
 
 
 

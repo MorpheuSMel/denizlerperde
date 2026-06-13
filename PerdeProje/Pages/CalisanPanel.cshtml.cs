@@ -62,14 +62,14 @@ namespace PerdeProje.Pages
             if (Rol.Equals("Paketlemeci", StringComparison.OrdinalIgnoreCase))
             {
                 PanelBasligi = "Paketleme Personeli Paneli";
-                Siparisler = await SiparisleriDurumaGoreGetir("Paketlemeye Hazır", "Dikim Tamamlandı", "Montaja Hazır", "Hazırlanıyor", "Sipariş Alındı");
+                Siparisler = await PaketlenecekSiparisleriGetir();
                 return Page();
             }
 
             if (Rol.Equals("Kargocu", StringComparison.OrdinalIgnoreCase))
             {
                 PanelBasligi = "Kargo Personeli Paneli";
-                Siparisler = await SiparisleriDurumaGoreGetir("Paketlendi", "Kargoya Hazır", "Kargoya Verilecek");
+                Siparisler = await KargoyaGidecekSiparisleriGetir();
                 return Page();
             }
 
@@ -124,15 +124,25 @@ namespace PerdeProje.Pages
                 .ToListAsync();
         }
 
-        private Task<List<Siparis>> SiparisleriDurumaGoreGetir(params string[] durumlar)
+        private Task<List<Siparis>> PaketlenecekSiparisleriGetir()
         {
             return _context.Siparisler
-                .Where(siparis => durumlar.Any(durum => ((siparis.Durum ?? "").Contains(durum))))
+                .Where(siparis => !((siparis.Durum ?? "").Contains("Paketlendi"))
+                    && !((siparis.Durum ?? "").Contains("Kargoya Verildi")))
+                .OrderByDescending(siparis => siparis.SiparisTarihi)
+                .ToListAsync();
+        }
+
+        private Task<List<Siparis>> KargoyaGidecekSiparisleriGetir()
+        {
+            return _context.Siparisler
+                .Where(siparis => (siparis.Durum ?? "").Contains("Paketlendi"))
                 .OrderByDescending(siparis => siparis.SiparisTarihi)
                 .ToListAsync();
         }
     }
 }
+
 
 
 
